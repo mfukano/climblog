@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import { Button, StyleSheet, ScrollView, View, Text, TextInput } from 'react-native'
-import { ClimbingDisciplinePicker, GradePicker, ProgressPicker, TerrainPicker, ProblematicHoldsPicker } from '../components/logging-selectors'
+import { ColorPicker, ClimbingDisciplinePicker, GradePicker, ProgressPicker, TerrainPicker, ProblematicHoldsPicker } from '../components/logging-selectors'
 import { Divider } from '../components/basic-components'
+import { climbsStore } from '../store/climbStore'
 
-const LoggingScreen = () => {
+const LoggingScreen = ({ navigation }) => {
+  const [color, setColor] = useState("Red")
   const [climbingDiscipline, setClimbingDiscipline] = useState("Boulder")
   const [grade, setGrade] = useState("V0")
   const [terrain, setTerrain] = useState([])
@@ -11,19 +13,23 @@ const LoggingScreen = () => {
   const [progress, setProgress] = useState("Projecting")
 
   const handleSubmit = () => {
-    // doSomethingWithState({
-    //   climbingDiscipline: climbingDiscipline,
-    //   grade: grade,
-    //   terrain: terrain,
-    //   problemHolds: problemHolds,
-    //   progress: progress
-    // })
+    climbsStore.addClimb({
+      color: color,
+      discipline: climbingDiscipline,
+      grade: grade,
+      terrain: terrain,
+      problemHolds: problemHolds,
+      progress: progress
+    })
+    navigation.goBack()
   } 
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Divider text={"Discipline"} />
       <ClimbingDisciplinePicker climbingDiscipline={climbingDiscipline} setClimbingDiscipline={setClimbingDiscipline}/>
+      <Divider text={"Hold Or Tape Color"} />
+      <ColorPicker color={color} setColor={setColor} />
       <Divider text={"Grade"} />
       <GradePicker climbingDiscipline={climbingDiscipline} selectedGrade={grade} setSelectedGrade={setGrade} />
       <Divider text={"Terrain"} />
@@ -32,8 +38,7 @@ const LoggingScreen = () => {
       <ProblematicHoldsPicker problemHolds={problemHolds} setProblemHolds={setProblemHolds} />
       <Divider text={"Progress"} />
       <ProgressPicker progress={progress} setProgress={setProgress} />
-      <Button title={"Submit Climb"} color={"blue"} />
-
+      <Button title={"Submit Climb"} color={"blue"} onPress={handleSubmit}/>
 
       <Divider text={"Page State"} />
       <View style={styles.container}>
