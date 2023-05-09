@@ -1,12 +1,14 @@
-import ClimbingDisciplinePicker from "./ClimbingDisciplinePicker";
-import GradePicker from "./GradePicker";
+import ColorPicker from "./ColorPicker"
+import ClimbingDisciplinePicker from "./ClimbingDisciplinePicker"
+import GradePicker from "./GradePicker"
 import ProblematicHoldsPicker from "./ProblematicHoldsPicker"
-import ProgressPicker from "./ProgressPicker";
+import ProgressPicker from "./ProgressPicker"
 import TerrainPicker from "./TerrainPicker"
 
 export {
-  GradePicker,
+  ColorPicker,
   ClimbingDisciplinePicker,
+  GradePicker,
   ProblematicHoldsPicker,
   ProgressPicker,
   TerrainPicker

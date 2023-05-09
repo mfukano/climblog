@@ -9,13 +9,13 @@ const TerrainPicker = ({ terrain, setTerrain }) => {
     <View style={styles.container}>
       <View style={styles.columnContainer}>
         <View style={styles.column}>
-          {terrainTypes.slice(0, half).map(text => (
-            <Checkbox setState={setTerrain} state={terrain} text={text} />
+          {terrainTypes.slice(0, half).map((text, index) => (
+            <Checkbox setState={setTerrain} state={terrain} text={text} key={index} />
           ))}
         </View>
         <View style={styles.column}>
-          {terrainTypes.slice(half).map(text => (
-            <Checkbox setState={setTerrain} state={terrain} text={text} />
+          {terrainTypes.slice(half).map((text, index) => (
+            <Checkbox setState={setTerrain} state={terrain} text={text} key={index+half} />
           ))}
         </View>
       </View>
