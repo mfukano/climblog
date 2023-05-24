@@ -25,6 +25,8 @@ export const create = async (
         dateSent Date,
       )
     `,
-    []
+    [],
+    (_, props) => success(props.rows._array, callback),
+    (_, err) => error(err, callback)
   )
 }

@@ -9,7 +9,7 @@ export type ResultError = Error | null
 */ 
 export const success = (
   data: any,
-  callback?: (data: any, error: ResultError) => void
+  callback?: (data: any, error: SQLite.SQLError | null) => void
 ) => {
   if (!callback) {
     return
@@ -18,12 +18,13 @@ export const success = (
 }
 
 export const error = (
-  err: ResultError,
-  callback?: (data: any, err: ResultError) => void
+  err: SQLite.SQLError,
+  callback?: (data: any, err: SQLite.SQLError | null) => void
 ) => {
   console.log(err)
   if (!callback) {
     return
   }
   callback(null, err)
+  return true
 }
