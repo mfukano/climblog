@@ -8,5 +8,4 @@ export type Climb = {
   dateStarted: Date
   dateSent: Date
   numSessionsBeforeSend: number
-  sessionsWorked: string[]
 }
