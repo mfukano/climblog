@@ -24,13 +24,12 @@ export const create = async (
         color string,
         discipline string,
         grade string,
-        terrain JSON,
-        problemHolds JSON,
+        terrain string,
+        problemHolds string,
         progress string
         dateStarted Date,
         dateSent Date,
-        numSessionsBeforeSend number,
-        sessionsWorked JSON,
+        numSessionsBeforeSend integer,
       )
     `,
     [],
@@ -72,6 +71,22 @@ export const write = async (
       String(climb.dateSent),
       String(climb.numSessionsBeforeSend),
     ],
+    (_, props) => success(props.rows._array, callback),
+    (_, err) => error(err, callback)
+  )
+}
+
+// need to see if this works and we can get some handle on how to work the rest of the calls
+export const get = async (
+  tx: SQLite.SQLTransaction,
+  climb?: Climb,
+  callback?: (data: [Climb], error: SQLite.SQLError | null) => void
+) => {
+  return tx.executeSql(
+    climb
+      ? `select climb from climbs where id = climb.id`
+      : `select * from climbs`,
+    [],
     (_, props) => success(props.rows._array, callback),
     (_, err) => error(err, callback)
   )
