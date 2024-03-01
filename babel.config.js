@@ -1,7 +1,7 @@
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ["module:metro-react-native-babel-preset"], // 'babel-preset-expo', 
-    plugins: [["@babel/plugin-proposal-decorators", { "legacy": true }]]
-  };
-};
+module.exports = api => {
+    const platform = api.caller(caller && caller.platform);
+
+    return {
+        presets: ['babel-preset-expo'],
+    }
+}

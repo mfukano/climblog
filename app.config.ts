@@ -1,8 +1,7 @@
-import { ExpoConfig} from 'expo/config';
+import { ExpoConfig, ConfigContext } from 'expo/config';
 
-const config: ExpoConfig = {
-  name: 'climblog',
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  ...config,
   slug: 'climblog',
-};
-
-export default config;
+  name: 'Climblog'
+})
