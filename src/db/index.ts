@@ -1,4 +1,6 @@
 import * as SQLite from 'expo-sqlite'
+import { create as createClimb } from './climb'
+import { create as createSession } from './session'
 
 export const db: any = SQLite.openDatabase('climblog.db')
 export type ResultError = Error | null
@@ -27,4 +29,9 @@ export const error = (
   }
   callback(null, err)
   return true
+}
+
+export const init = (tx: SQLite.SQLTransaction) => {
+  createClimb(tx)
+  createSession(tx)
 }
