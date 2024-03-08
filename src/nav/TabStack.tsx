@@ -12,7 +12,7 @@ export default function TabStack() {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Session" component={NavStack} />
+        <Tab.Screen name="Session" component={NavStack} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   )
