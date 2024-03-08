@@ -1,5 +1,5 @@
 module.exports = api => {
-    const platform = api.caller(caller && caller.platform);
+    api.cache(true);
 
     return {
         presets: ['babel-preset-expo'],
