@@ -2,9 +2,12 @@ import React, {useSyncExternalStore} from 'react'
 import { Button, StyleSheet, ScrollView, Text, View } from 'react-native'
 import { Divider } from '../components/basic-components'
 import { climbsStore } from '../store/climbStore'
+import { db } from '../db'
 
 const SessionScreen = ({ navigation }) => {
   const climbs = useSyncExternalStore(climbsStore.subscribe, climbsStore.getSnapshot)
+
+  // TODO: Refactor to layout page
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
