@@ -2,6 +2,8 @@ import React from "react";
 
 import * as SQLite from "expo-sqlite";
 
+import { ClimbDB } from "../model/climb";
+
 
 const db = SQLite.openDatabase("climblog.db");
 
@@ -26,19 +28,31 @@ const db = SQLite.openDatabase("climblog.db");
 // 	);
 // };
 
-const getClimbs = () => {
-	const res = db.transaction(tx => {
-		const res = tx.executeSql(
+const getClimbs = (set) => {
+	db.transaction(tx => {
+		tx.executeSql(
 			"select * from climbs", 
 			[],
-			(_, res) => { console.log("get climbs results"); console.log(JSON.stringify(res.rows._array)); return res.rows._array }
-		)
-		return res
+			(_, { rows: { _array } }) => { 
+				console.log("[getClimbs] {db.transaction} {tx.executesql} get climbs results"); 
+				console.log(_array); 
+				set(_array)
+			}
+		) 
 	})
-	console.log(`completed getClimbs results:`)
-	console.log(JSON.stringify(res))
-	return res
 }
+
+// const getClimbs =  async (): Promise<ClimbDB[]> => {
+// 	let outerRes = []
+// 	db.transactionAsync(async tx => {
+// 		await tx.executeSqlAsync(
+// 			"select * from climbs"
+// 		)
+// 		.then(res => outerRes.concat(res))
+// 		.catch(reason => console.warn(`get climbs promise failed: ${reason}`))
+// 	})
+// 	return outerRes;
+// }
 
 const insertSession = (sessionId, successFunc) => {
 	db.transaction(tx => {

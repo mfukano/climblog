@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 
 import { database } from "../../db/sqlite";
 
-import { climbsStore } from "../../store/climbStore";
-
 export default function useDatabase() {
     const [isDBLoadingComplete, setDBLoadingComplete] = React.useState(false);
 
@@ -25,10 +23,6 @@ export default function useDatabase() {
                 console.log("starting setupSessionsAsync"); 
                 await database.setupSessionsAsync();
                 console.log("finished setupSessionsAsync");
-
-                const climbs = database.getClimbs();
-                console.log(`climbs in useDatabase:`)
-                console.log(climbs)
 
                 setDBLoadingComplete(true);
             } catch (e) {
