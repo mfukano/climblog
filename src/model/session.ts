@@ -1,6 +1,6 @@
 export type Session = {
-  sessionStart: Date
-  sessionEnd: Date
+  sessionDate: Date
   duration: string
   climbs: string[]
+  gym: string
 }

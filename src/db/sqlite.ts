@@ -1,59 +1,58 @@
-import React from "react";
-
 import * as SQLite from "expo-sqlite";
-
-import { ClimbDB } from "../model/climb";
-
 
 const db = SQLite.openDatabase("climblog.db");
 
-/**
- * Each session will insert n climbs being worked on or sent during the session
- * In this way, we need to perform the session creation first, retain the session id
- * and link each climb subsequently with the session id
- */
-// const getSessions = (setSessionFunc) => {
-// 	db.transaction(
-// 		tx => {
-// 			tx.executeSql(
-// 				"select * from sessions",
-// 				[],
-// 				(_, { rows: { _array } }) => {
-// 					setSessionFunc(_array);
-// 				}
-// 			);
-// 		},
-// 		(error) => { console.log("db error load sessions"); console.log(error); },
-// 		() => { console.log("loaded climbs"); }
-// 	);
-// };
+/** SECTION Setup */
+export const connectToDatabase = async () => {
+	return SQLite.openDatabase(
+		"climblog.db",
+		undefined,
+		"",
+		undefined,
+		(db: SQLite.SQLiteDatabase) => {
+			console.log("Created DB: ", db);
+		}
+	);
+};
+
+/** SECTION CRUD */
 
 const getClimbs = (set) => {
 	db.transaction(tx => {
 		tx.executeSql(
-			"select * from climbs", 
+			"select * from climbs",
 			[],
-			(_, { rows: { _array } }) => { 
-				console.log("[getClimbs] {db.transaction} {tx.executesql} get climbs results"); 
-				console.log(_array); 
-				set(_array)
+			(_, { rows: { _array } }) => {
+				console.log("[getClimbs] {db.transaction} {tx.executesql} get climbs results");
+				console.log(_array);
+				set(_array);
 			}
-		) 
-	})
-}
+		);
+	});
+};
 
-// const getClimbs =  async (): Promise<ClimbDB[]> => {
-// 	let outerRes = []
-// 	db.transactionAsync(async tx => {
-// 		await tx.executeSqlAsync(
-// 			"select * from climbs"
-// 		)
-// 		.then(res => outerRes.concat(res))
-// 		.catch(reason => console.warn(`get climbs promise failed: ${reason}`))
-// 	})
-// 	return outerRes;
-// }
+const getSessions = (set) => {
+	db.transaction(tx => {
+		tx.executeSql(
+			"select * from sessions",
+			[],
+			(_, { rows: { _array } }) => {
+				console.log("[getSessions] {db.transaction} {tx.executesql} get sessions results");
+				console.log(_array);
+				set(_array);
+			}
+		);
+	});
+};
 
+
+/**
+ * `insertSession` should be the response for when a user is beginning to log their workout.
+ * Sessions track frequency of workout, and climbs point  
+ *  
+ * @param successFunc 
+ * sessionId - implicit. Should be tracked by  
+ */
 const insertSession = (sessionId, successFunc) => {
 	db.transaction(tx => {
 		tx.executeSql("insert statement"),
@@ -63,16 +62,18 @@ const insertSession = (sessionId, successFunc) => {
 	});
 };
 
+/** SECTION Debug */
+
 const dropDatabaseTablesAsync = async () => {
 	await db.transactionAsync(async tx => {
-		await tx.executeSqlAsync(`drop table if exists sessions`);
-		await tx.executeSqlAsync(`drop table if exists climbs`);
-	})
+		await tx.executeSqlAsync("drop table if exists sessions");
+		await tx.executeSqlAsync("drop table if exists climbs");
+	});
 };
 
 const setupDatabaseAsync = async () => {
 	await db.transactionAsync(async tx => {
-		// const setupResult = await Promise.all([
+		const setupResult = await Promise.all([
 			await tx.executeSqlAsync(
 				`create table if not exists sessions (
 					id integer primary key not null,
@@ -80,8 +81,7 @@ const setupDatabaseAsync = async () => {
 					sessionEnd string,
 					duration integer,
 					climbs string
-				);`
-			);
+			);`),
 			await tx.executeSqlAsync(
 				`create table if not exists climbs (
 					id integer primary key not null,
@@ -95,13 +95,10 @@ const setupDatabaseAsync = async () => {
 					dateSent Date,
 					numSessionsBeforeSend integer
 				);`
-			);
-		// 	),
-		// ])
-
-		// console.log("finished database setup; below is created tables")
-		// console.log(setupResult)
-	}) 
+			)]);
+		console.log("setup should be completed; below is the created tables:");
+		console.log(setupResult.forEach((table, idx) => console.log(`table ${idx}: \n` + table.rows)));
+	}).then(() => console.log("finished database setup; below is created tables"));
 };
 
 const setupSessionsAsync = async () => {
@@ -110,16 +107,16 @@ const setupSessionsAsync = async () => {
 			`insert into sessions (
 				id, sessionStart, sessionEnd, duration, climbs	
 			) 
-			values (?, ?, ?, ?, ?)`,
+			values (?, ?, ?, ?, ?)
+			returning *`,
 			[
 				1, "", "", 120, "seed data"
 			]
-		)
-		console.log("setup should be completed; below is the returned rows")
-		console.log(setupResult.rows)
-	})
-}
-
+		);
+		console.log("setup should be completed; below is the returned rows");
+		console.log(setupResult.rows);
+	});
+};
 
 const setupClimbsAsync = async () => {
 	await db.transactionAsync(async tx => {
@@ -136,21 +133,23 @@ const setupClimbsAsync = async () => {
 				dateSent, 
 				numSessionsBeforeSend 
 			) 
-			values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			returning *`,
 			[1, "red", "boulder", "V2", "slab", "crimp", "sent", "2024-01-01", "2024-01-01", 1]
-		)
-		console.log("setup should be completed; below is the returned rows")
-		console.log(setupResult.rows)
-	})
-}
+		);
+		console.log("setup should be completed; below is the returned rows");
+		console.log(setupResult.rows);
+	});
+};
 
+/** SECTION Exports */
 
 export const database = {
-	// getSessions,
+	getSessions,
 	getClimbs,
 	insertSession,
 	setupDatabaseAsync,
 	setupClimbsAsync,
 	setupSessionsAsync,
 	dropDatabaseTablesAsync,
-}
+};
