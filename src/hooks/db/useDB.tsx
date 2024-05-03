@@ -3,36 +3,36 @@ import React, { useEffect } from "react";
 import { database } from "../../db/sqlite";
 
 export default function useDatabase() {
-    const [isDBLoadingComplete, setDBLoadingComplete] = React.useState(false);
+	const [isDBLoadingComplete, setDBLoadingComplete] = React.useState(false);
 
-    useEffect(() => {
-        async function loadDataAsync() {
-            try {
-                console.log("starting dropDatabaseTablesAsync")
-                await database.dropDatabaseTablesAsync();
-                console.log("finished dropDatabaseTablesAsync");
+	useEffect(() => {
+		async function loadDataAsync() {
+			try {
+				console.log("starting dropDatabaseTablesAsync");
+				await database.dropDatabaseTablesAsync();
+				console.log("finished dropDatabaseTablesAsync");
 
-                console.log("starting setupDatabaseAsync"); 
-                await database.setupDatabaseAsync();
-                console.log("finished setupDatabaseAsync");
+				console.log("starting setupDatabaseAsync"); 
+				await database.setupDatabaseAsync();
+				console.log("finished setupDatabaseAsync");
 
-                console.log("starting setupClimbsAsync"); 
-                await database.setupClimbsAsync();
-                console.log("finished setupClimbsAsync");
+				console.log("starting setupClimbsAsync"); 
+				await database.setupClimbsAsync();
+				console.log("finished setupClimbsAsync");
 
-                console.log("starting setupSessionsAsync"); 
-                await database.setupSessionsAsync();
-                console.log("finished setupSessionsAsync");
+				console.log("starting setupSessionsAsync"); 
+				await database.setupSessionsAsync();
+				console.log("finished setupSessionsAsync");
 
-                setDBLoadingComplete(true);
-            } catch (e) {
-                console.warn("Issue setting dropping or setting up the database.")
-                console.warn(e);
-            }
-        }
+				setDBLoadingComplete(true);
+			} catch (e) {
+				console.warn("Issue setting dropping or setting up the database.");
+				console.warn(e);
+			}
+		}
 
-        loadDataAsync();
-    }, []);
+		loadDataAsync();
+	}, []);
 
-    return isDBLoadingComplete;
+	return isDBLoadingComplete;
 }
