@@ -62,6 +62,9 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+expo-env.d.ts
 
 # Shame
 DEVLOG.md
+.prettierrc
+Climblog.drawio

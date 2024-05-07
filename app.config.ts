@@ -5,6 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	slug: "climblog",
 	name: "Climblog",
 	plugins: [
-		"expo-router"
+		"expo-router",
+		"expo-font"
 	]
 });
