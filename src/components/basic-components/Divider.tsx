@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 // eslint-disable-next-line react/prop-types
-const Divider = ({text}) => {
+const Divider = ({ text }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.line} />
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 		margin: 20,
 		textAlign: "center",
 		width: 120,
-	}
+	},
 });
 
 export default Divider;

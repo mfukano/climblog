@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { database } from "../../db/sqlite";
+import { database } from "@s/db/sqlite";
 
 export default function useDatabase() {
 	const [isDBLoadingComplete, setDBLoadingComplete] = React.useState(false);
@@ -12,21 +12,15 @@ export default function useDatabase() {
 				await database.dropDatabaseTablesAsync();
 				console.log("finished dropDatabaseTablesAsync");
 
-				console.log("starting setupDatabaseAsync"); 
-				await database.setupDatabaseAsync();
+				console.log("starting setupDatabaseAsync");
+				await database.setupTablesAsync();
 				console.log("finished setupDatabaseAsync");
-
-				console.log("starting setupClimbsAsync"); 
-				await database.setupClimbsAsync();
-				console.log("finished setupClimbsAsync");
-
-				console.log("starting setupSessionsAsync"); 
-				await database.setupSessionsAsync();
-				console.log("finished setupSessionsAsync");
 
 				setDBLoadingComplete(true);
 			} catch (e) {
-				console.warn("Issue setting dropping or setting up the database.");
+				console.warn(
+					"Issue setting dropping or setting up the database."
+				);
 				console.warn(e);
 			}
 		}

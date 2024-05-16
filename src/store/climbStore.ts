@@ -7,7 +7,7 @@ let listeners = [];
  *to the database with a 
  */
 export const climbsStore = {
-	addClimb({ 
+	addClimb({
 		color,
 		discipline,
 		grade,
@@ -21,7 +21,7 @@ export const climbsStore = {
 			grade: grade,
 			terrain: terrain,
 			problemHolds: problemHolds,
-			progress: progress 
+			progress: progress
 		},
 		...climbs
 		];

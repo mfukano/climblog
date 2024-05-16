@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, ScrollView, Text, View } from "react-native";
 import { router } from "expo-router";
-import { database } from "@/src/db/sqlite";
+import { database } from "@s/db/sqlite";
 
 // TODO: I need to set up StackProps before I can run this through the linter
 // eslint-disable-next-line react/prop-types
@@ -9,8 +9,29 @@ export default function ManageSessions() {
 	const [sessionList, setSessionList] = useState([]);
 	// const climbs = useSyncExternalStore(climbsStore.subscribe, climbsStore.getSnapshot);
 
+	/**
+	 * createNewSession occurs after the modal for gym name selection occurs.
+	 * This function should probably live on that modal.
+	 * @gym String param accepted from the modal after input.
+	 */
+	async function createNewSession(
+		// gym: string
+	) {
+		const insertedSessionId: number = await database.insertSession({
+			gym: "Dogpatch Boulders",
+			duration: "",
+			sessionDate: new Date()
+		});
+		router.navigate({ pathname: `/${insertedSessionId}/active` });
+	}
+
 	useEffect(() => {
-		database.getSessions(setSessionList);
+		async function populateSessionsList() {
+			const sessions = await database.getSessions();
+
+			setSessionList(sessions);
+		}
+		populateSessionsList();
 	}, []);
 
 	/*
@@ -44,7 +65,7 @@ export default function ManageSessions() {
 				<Button
 					title={"Start a new session"}
 					color={"blue"}
-					onPress={() => router.push("/new")}
+					onPress={() => createNewSession}
 				/>
 				<View style={styles.climbListContainer}>
 					{sessionList.length > 0 &&

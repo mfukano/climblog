@@ -1,22 +1,22 @@
-import React, {useState} from "react";
-import { 
-	Button, 
-	StyleSheet, 
-	ScrollView, 
-	View, 
-	Text, 
-	// TextInput 
+import React, { useState } from "react";
+import {
+	Button,
+	StyleSheet,
+	ScrollView,
+	View,
+	Text,
+	// TextInput
 } from "react-native";
-import { 
-	ColorPicker, 
-	ClimbingDisciplinePicker, 
-	GradePicker, 
-	ProgressPicker, 
-	TerrainPicker, 
-	ProblematicHoldsPicker 
-} from "@/src/components/logging-selectors";
-import { Divider } from "@/src/components/basic-components";
-import { climbsStore } from "@/src/store/climbStore";
+import {
+	ColorPicker,
+	ClimbingDisciplinePicker,
+	GradePicker,
+	ProgressPicker,
+	TerrainPicker,
+	ProblematicHoldsPicker,
+} from "@s/components/logging-selectors";
+import { Divider } from "@s/components/basic-components";
+import { climbsStore } from "@s/store/climbStore";
 import { router } from "expo-router";
 
 // TODO: I need to set up StackProps before react navigation can pass through the linter
@@ -36,28 +36,45 @@ export default function LoggingScreen() {
 			grade: grade,
 			terrain: terrain,
 			problemHolds: problemHolds,
-			progress: progress
+			progress: progress,
 		});
+		async function createClimb () {
 
+		}
+		createClimb();
 		// eslint-disable-next-line react/prop-types
 		router.back();
-	}; 
+	};
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<Divider text={"Discipline"} />
-			<ClimbingDisciplinePicker climbingDiscipline={climbingDiscipline} setClimbingDiscipline={setClimbingDiscipline}/>
+			<ClimbingDisciplinePicker
+				climbingDiscipline={climbingDiscipline}
+				setClimbingDiscipline={setClimbingDiscipline}
+			/>
 			<Divider text={"Hold Or Tape Color"} />
 			<ColorPicker color={color} setColor={setColor} />
 			<Divider text={"Grade"} />
-			<GradePicker climbingDiscipline={climbingDiscipline} selectedGrade={grade} setSelectedGrade={setGrade} />
+			<GradePicker
+				climbingDiscipline={climbingDiscipline}
+				selectedGrade={grade}
+				setSelectedGrade={setGrade}
+			/>
 			<Divider text={"Terrain"} />
 			<TerrainPicker terrain={terrain} setTerrain={setTerrain} />
 			<Divider text={"Problematic Holds"} />
-			<ProblematicHoldsPicker problemHolds={problemHolds} setProblemHolds={setProblemHolds} />
+			<ProblematicHoldsPicker
+				problemHolds={problemHolds}
+				setProblemHolds={setProblemHolds}
+			/>
 			<Divider text={"Progress"} />
 			<ProgressPicker progress={progress} setProgress={setProgress} />
-			<Button title={"Submit Climb"} color={"blue"} onPress={handleSubmit}/>
+			<Button
+				title={"Submit Climb"}
+				color={"blue"}
+				onPress={handleSubmit}
+			/>
 
 			<Divider text={"Page State"} />
 			<View style={styles.container}>
@@ -67,7 +84,6 @@ export default function LoggingScreen() {
 				<Text>{problemHolds.join(",")}</Text>
 				<Text>{progress}</Text>
 			</View>
-
 		</ScrollView>
 	);
 }
@@ -86,5 +102,5 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		fontSize: 20,
 		width: "50%",
-	}
+	},
 });

@@ -1,5 +1,5 @@
 import Divider from "./Divider";
 
-export { 
+export {
 	Divider,
 };

@@ -65,6 +65,7 @@ web-build/
 expo-env.d.ts
 
 # Shame
+*.code-workspace
 DEVLOG.md
 .prettierrc
 Climblog.drawio
