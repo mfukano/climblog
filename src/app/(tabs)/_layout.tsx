@@ -3,7 +3,7 @@ import {
 	FontAwesome6,
 	MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import React from "react";
+import * as React from "react";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
@@ -13,8 +13,8 @@ export default function TabLayout() {
 				name="index"
 				options={{
 					title: "Home",
-					tabBarIcon: () => (
-						<Feather name="home" size={28} color="black" />
+					tabBarIcon: ({ color }) => (	
+						<Feather name="home" size={28} color={color} />
 					),
 				}}
 			/>
@@ -22,8 +22,8 @@ export default function TabLayout() {
 				name="profile"
 				options={{
 					title: "Profile",
-					tabBarIcon: () => (
-						<FontAwesome6 name="person" size={28} color="black" />
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6 name="person" size={28} color={color} />
 					),
 				}}
 			/>

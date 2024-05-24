@@ -16,8 +16,8 @@ export default function NavStack() {
 					title: "Manage Sessions",
 				}}
 			/>
-			<Stack.Screen
-				name="new"
+			{/* <Stack.Screen
+				name="active"
 				options={{
 					title: "Active Session",
 					headerLeft: () => (
@@ -30,7 +30,7 @@ export default function NavStack() {
 						</Pressable>
 					),
 				}}
-			/>
+			/> */}
 			<Stack.Screen
 				name="logging"
 				options={{

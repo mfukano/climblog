@@ -1,21 +1,29 @@
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import React, { 
 	Suspense, 
-	useEffect 
+	useEffect
 } from "react";
 import useDatabase from "@s/hooks/db/useDB";
-import { database } from "../db/sqlite";
 import { SQLiteProvider } from "expo-sqlite";
 import { Stack } from "expo-router";
 import Fallback from "../components/basic-components/Fallback";
 import { View } from "react-native";
+import { 
+	QueryClient,
+	QueryClientProvider,
+} from "@tanstack/react-query";
+
+import { useColorScheme } from "@s/hooks/useColorScheme";
+
+const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	const isDBLoadingComplete = useDatabase();
+	const {createDB, isDBLoading} = useDatabase();
 	const [loaded, error] = useFonts({
 		SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
 		...FontAwesome.font,
@@ -26,31 +34,49 @@ export default function RootLayout() {
 	}, [error]);
 
 	useEffect(() => {
-		if (loaded) {
-			console.log(`isDBLoadingComplete: ${isDBLoadingComplete}`);
+		console.log("loaded: ", loaded);
+		console.log("isDBLoading: ", isDBLoading);
+		if (loaded && !isDBLoading) {
+			console.log("Hiding splash screen");
 			SplashScreen.hideAsync();
 		}
-	}, [loaded]);
+	}, [loaded, isDBLoading]);
 
+	useEffect(() => {
+		(async () => {
+			await createDB();
+		})();
+	}, []);
 	
-	if (!isDBLoadingComplete) {
-		return null;
+	if (!loaded) {
+		console.log("Not loaded, returning null");
+		return (<View><Fallback /></View>);
 	}
 
-	return (
-		<View>
-			<Suspense fallback={<Fallback />}>
-				<SQLiteProvider 
-					databaseName="climblog.db"
-					onInit={database.setupTablesAsync} 
-					useSuspense>
+	console.log("Rendering layout");
+	return <RootLayoutNav />;
+}
 
-					{/** providers that can be accessed by any routes  */}
-					<Stack>
-						<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-					</Stack>
-				</SQLiteProvider>
+function RootLayoutNav() {
+	const colorScheme = useColorScheme();
+
+	return (
+		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme }>
+			<Suspense fallback={<Fallback />}>
+				<QueryClientProvider client={queryClient}>
+					<SQLiteProvider 
+						databaseName="climblog.db"
+						assetSource={{ assetId: require("@/assets/db/climblog.db"), forceOverwrite: false }}
+						useSuspense>
+
+						{/** providers that can be accessed by any routes  */}
+						<Stack>
+							{/* <Fallback /> */}
+							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+						</Stack>
+					</SQLiteProvider>
+				</QueryClientProvider>
 			</Suspense>
-		</View>
+		</ThemeProvider>
 	);
 }

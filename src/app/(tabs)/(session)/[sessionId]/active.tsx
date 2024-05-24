@@ -1,25 +1,17 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Text, ScrollView, Button, StyleSheet } from "react-native";
-import { database } from "@s/db/sqlite";
 import { Link, useGlobalSearchParams } from "expo-router";
+import useClimbsBySession from "@/src/hooks/db/useClimbsBySession";
 
-export default function SessionPage() {
+export default function ActiveSessionPage() {
 	// Session ID to be passed to NewSession after creating on /manage
-	const { sessionId } = useGlobalSearchParams<{ sessionId: string}>();
-	const [climbList, setClimbList] = useState([]);
+	const { sessionId } = useGlobalSearchParams<{ sessionId: string }>();
+	const climbsBySesh = useClimbsBySession(parseInt(sessionId));
 
-	useEffect(() => {
-		async function init() {
-			const climbs = await database.getClimbsBySessionId(
-				parseInt(sessionId)
-			);
-			setClimbList(climbs);
-		}
-		init();
-	}, []);
+	console.log(`session data: ${JSON.stringify(climbsBySesh?.data)}`);
 
-	if (!climbList.length) {
+	if (!climbsBySesh?.data || !climbsBySesh?.data.length) {
 		return (
 			<View>
 				<Text>Error</Text>
@@ -36,21 +28,20 @@ export default function SessionPage() {
 					<Button title={"Log a Climb"} color={"blue"} />
 				</Link>
 				<View style={styles.climbListContainer}>
-					{climbList.length > 0 &&
-						climbList.map((climb, index) => (
-							// <Link href=`/climb/${climbId}`/>
-							<View style={styles.climbItemContainer} key={index}>
-								<Text style={styles.climbItemHeader}>
-									{climb.color} {climb.grade}
-								</Text>
-								<Text>Terrain type: {climb.terrain}</Text>
-								<Text>Problem holds: {climb.problemHolds}</Text>
-								{/* <Text>Terrain type: {climb.terrain?.join(',')}</Text> */}
-								{/* <Text>Problem holds: {climb.problemHolds.join(',')}</Text> */}
-								<Text>Progress: {climb.progress}</Text>
-							</View>
-							// </Link>
-						))}
+					{climbsBySesh?.data?.map((climb, index) => (
+						// <Link href=`/climb/${climbId}`/>
+						<View style={styles.climbItemContainer} key={index}>
+							<Text style={styles.climbItemHeader}>
+								{climb.color} {climb.grade}
+							</Text>
+							<Text>Terrain type: {climb.terrain}</Text>
+							<Text>Problem holds: {climb.problemHolds}</Text>
+							{/* <Text>Terrain type: {climb.terrain?.join(',')}</Text> */}
+							{/* <Text>Problem holds: {climb.problemHolds.join(',')}</Text> */}
+							<Text>Progress: {climb.progress}</Text>
+						</View>
+						// </Link>
+					))}
 				</View>
 			</ScrollView>
 		);

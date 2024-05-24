@@ -1,6 +1,10 @@
-import React from "react";
-import { Text } from "react-native";
+import * as React from "react";
+import { Text, View } from "react-native";
 
 export default function TabProfileScreen() {
-	return <Text>Hello Profile Screen!</Text>;
+	return (
+		<View>
+			<Text>Hello Profile Screen!</Text>
+		</View>
+	);
 }
