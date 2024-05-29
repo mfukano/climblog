@@ -45,6 +45,12 @@ export default function NavStack() {
 					),
 				}}
 			/>
+			<Stack.Screen
+				name="modal"
+				options={{
+					presentation: "modal",
+				}}
+			/>
 		</Stack>
 	);
 }
