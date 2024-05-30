@@ -1,10 +1,10 @@
 import StyledButton from "@/src/components/basic-components/StyledButton";
-import useActiveSession from "@/src/hooks/db/useActiveSession";
+import useTimer from "@/src/hooks/db/useTimer";
 import * as React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
 export default function Timer() {
-	const {displayTime, setOngoing, clearTime} = useActiveSession();
+	const {displayTime, setOngoing, clearTime} = useTimer();
 	const ref = React.useRef(null);
 	return (
 		<>
