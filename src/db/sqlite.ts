@@ -22,9 +22,11 @@ import { assert } from "console";
 /** SECTION CRUD */
 /** SESSIONS */
 const getSessions: 
-(db: SQLite.SQLiteDatabase) => Promise<SessionDB[] | null>
+	(db: SQLite.SQLiteDatabase) => Promise<SessionDB[] | null>
 = async (db: SQLite.SQLiteDatabase) => {
 	console.log("Starting getSessions async query");
+
+	// TODO: This should be extracted and paginated
 	const result: Promise<SessionDB[] | null> = db.getAllAsync<SessionDB>(`
 		SELECT *
 		FROM sessions
@@ -49,21 +51,9 @@ const getSessions:
 const insertSession = async (
 	db: SQLite.SQLiteDatabase,
 	session: Session) => {
-	/*
-	 * const db = await SQLite.openDatabaseAsync("@/assets/db/climblog.db")
-	 * 	.then(db => {
-	 * 		console.log("Successfully grabbed new DB access reference: ", JSON.stringify(db));
-	 * 		return db;
-	 * 	})
-	 * 	.catch(e => console.error("Issue with opening DB reference: ", e));
-	 * if (!db) {
-	 * 	console.log("Wasn't able to open the database; returning.");
-	 * 	return;
-	 * }
-	 */
 	const result = await db.runAsync(insertSessionSql, {
 		$sessionDate: session.sessionDate.toString(),
-		$duration: 120,
+		$duration: session.duration,
 		$gym: session.gym
 	})
 		.then(res => {
