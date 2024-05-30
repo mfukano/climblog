@@ -1,47 +1,43 @@
-import { Link } from "expo-router";
 import * as React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const STYLED_BLUE = "#326771";
 
 type StyledButtonProps = {
-	href?: string
 	text: string
+	style?: object
 	onPress?: () => void 
 }
 
-
-const StyledButton = (({href, text, onPress}: StyledButtonProps) => {
-	console.log(`
-	href: ${href}
-	text: ${text}
-	onPress: ${JSON.stringify(onPress)}`);
+const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledButton({text, style, onPress}, ref)  {
+	
 
 	return (
-		<Link href={href ? href : "#"} asChild>
-			<Pressable 
-				onPress={onPress}
-				style={({pressed}) => [
-					{
-						...styles.viewButton,
-						opacity: pressed ? 0.7 : 1,
-						shadowRadius: pressed ? 2 : 0,
-						shadowColor: pressed ? "#999" : "none",
-						shadowOpacity: pressed ? 1 : 0,
-						shadowOffset: pressed ? {
-							width: -1,
-							height: -2,
-						} : null 
-					}
-				]}
-			>
-				<View style={styles.viewButton}>
-					<Text style={styles.buttonText}>{text}</Text>
-				</View>
-			</Pressable>
-		</Link>
+		<Pressable 
+			ref={ref}
+			onPress={onPress}
+			style={({pressed}) => [
+				{
+					...styles.viewButton,
+					...style,
+					opacity: pressed ? 0.7 : 1,
+					shadowRadius: pressed ? 2 : 0,
+					shadowColor: pressed ? "#999" : "none",
+					shadowOpacity: pressed ? 1 : 0,
+					shadowOffset: pressed ? {
+						width: -1,
+						height: -2,
+					} : null 
+				}
+			]}
+		>
+			{/* <Link href={props.href ? props.href : "#"} asChild> */}
+			<Text style={styles.buttonText}>{text}</Text>
+			{/* </Link> */}
+		</Pressable>
 	);
 });
+StyledButton.displayName = "StyledButton";
 
 const styles = StyleSheet.create({
 	container: {
@@ -53,6 +49,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 		backgroundColor: STYLED_BLUE,
 		borderRadius: 5,
+		paddingVertical: 12,
+		paddingHorizontal: 32,
+		elevation: 3,
+		alignItems: "center",
 	},
 	buttonText: {
 		fontSize: 20,

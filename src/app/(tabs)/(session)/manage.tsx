@@ -2,12 +2,14 @@ import React from "react";
 import { StyleSheet, ScrollView, Text, View } from "react-native";
 import useSessions from "@/src/hooks/db/useSessions";
 import StyledButton from "@/src/components/basic-components/StyledButton";
+import { Link } from "expo-router";
 
 // TODO: I need to set up StackProps before I can run this through the linter
 // eslint-disable-next-line react/prop-types
 export default function ManageSessions() {
 	console.log("loading index screen of sessions");
 	const sessions = useSessions();
+	const ref = React.useRef(null);
 
 	// TODO: Refactor to layout page
 
@@ -27,7 +29,9 @@ export default function ManageSessions() {
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-			<StyledButton href={"/modal"} text={"Start a new session"} />
+			<Link href={"/modal"} asChild>
+				<StyledButton ref={ref} text={"Start a new session"} />
+			</Link>
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
 					<View style={styles.climbItemContainer} key={index}>
