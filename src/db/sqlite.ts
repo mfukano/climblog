@@ -5,6 +5,7 @@ import { Climb, ClimbDB } from "../model/climb";
 import { Session, SessionDB } from "../model/session";
 import { assert } from "console";
 
+/** SECTION Generic helper functions */
 
 
 /** SECTION Setup */
@@ -21,6 +22,35 @@ import { assert } from "console";
 
 /** SECTION CRUD */
 /** SESSIONS */
+
+/**
+ * `insertSession` should be the response for when a user is beginning to log their workout.
+ * Sessions track frequency of workout, and climbs associate to sessions. 
+ *  
+ * @param successFunc 
+ * sessionId - implicit. Should be tracked by  
+ */
+const insertSession = async (
+	db: SQLite.SQLiteDatabase,
+	session: Session
+) => {
+	
+	// session validation
+	
+
+	const result = await db.runAsync(insertSessionSql, {
+		$sessionDate: session.sessionDate.toString(),
+		$duration: session.duration,
+		$gym: session.gym
+	})
+		.then(res => {
+			console.log("finished insertSessionSql, result: ", res.lastInsertRowId, res.changes);
+			return res.lastInsertRowId;
+		}).catch(e => console.error("Error in insertSession: ", e));
+	console.log("Returning the insertedRowId, or null, from insertSession", result);
+	return result;
+};
+
 const getSessions: 
 	(db: SQLite.SQLiteDatabase) => Promise<SessionDB[] | null>
 = async (db: SQLite.SQLiteDatabase) => {
@@ -41,33 +71,30 @@ const getSessions:
 	return result;
 };
 
-/**
- * `insertSession` should be the response for when a user is beginning to log their workout.
- * Sessions track frequency of workout, and climbs associate to sessions. 
- *  
- * @param successFunc 
- * sessionId - implicit. Should be tracked by  
- */
-const insertSession = async (
+const updateSession = async (
 	db: SQLite.SQLiteDatabase,
-	session: Session) => {
-	const result = await db.runAsync(insertSessionSql, {
-		$sessionDate: session.sessionDate.toString(),
-		$duration: session.duration,
-		$gym: session.gym
-	})
-		.then(res => {
-			console.log("finished insertSessionSql, result: ", res.lastInsertRowId, res.changes);
-			return res.lastInsertRowId;
-		}).catch(e => console.error("Error in insertSession: ", e));
-	console.log("Returning the insertedRowId, or null, from insertSession", result);
-	return result;
+	session: Session
+) => {
+	/*
+	 * TODO implement update session
+	 *  Update session should be able to set a session as ended
+	 */
+};
+
+const deleteSession = async (
+	db: SQLite.SQLiteDatabase,
+	session: Session
+) => {
+
+	//TODO implement delete session
 };
 
 /** CLIMBS */
 
-const getClimbsBySessionId = async (db: SQLite.SQLiteDatabase,
-	sessionId: number) => {
+const getClimbsBySessionId = async (
+	db: SQLite.SQLiteDatabase,
+	sessionId: number
+) => {
 	const result = await db.getAllAsync<ClimbDB>(getClimbsBySessionIdSql, {
 		$sessionId: sessionId
 	});
@@ -79,7 +106,10 @@ const getClimb = async (db: SQLite.SQLiteDatabase) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const insertClimb = async (db: SQLite.SQLiteDatabase, climb: ClimbDB) => {
+const insertClimb = async (
+	db: SQLite.SQLiteDatabase, 
+	climb: ClimbDB
+) => {
 	const result = await db.runAsync(insertClimbSql, {
 		$color: climb.color,
 		$discipline: climb.discipline,
@@ -91,7 +121,7 @@ const insertClimb = async (db: SQLite.SQLiteDatabase, climb: ClimbDB) => {
 		$dateSent: climb.progress === "sent" 
 			? new Date().toDateString() 
 			: null,
-		$sessions: JSON.stringify(climb.sessions)
+		$sessions: JSON.stringify(climb.sessions),
 	});
 
 	console.log("insertClimb results: ", 
@@ -99,9 +129,20 @@ const insertClimb = async (db: SQLite.SQLiteDatabase, climb: ClimbDB) => {
 		result.changes);
 };
 
+const updateClimb = async (
+	db: SQLite.SQLiteDatabase,
+	climb: ClimbDB
+) => {
+	/*
+	 * validate shape of climb
+	 *  
+	 */
+};
 
 /** SECTION Debug */
-const dropDatabaseTablesAsync = async (db: SQLite.SQLiteDatabase) => {
+const dropDatabaseTablesAsync = async (
+	db: SQLite.SQLiteDatabase
+) => {
 	await Promise.all([
 		await db.runAsync(`
 			DROP TABLE IF EXISTS sessions;
@@ -119,22 +160,22 @@ const dropDatabaseTablesAsync = async (db: SQLite.SQLiteDatabase) => {
 	return db;
 };
 
-const createTablesAsync = async (db: SQLite.SQLiteDatabase) => {
+const createTablesAsync = async (
+	db: SQLite.SQLiteDatabase
+) => {
 	console.log("Starting createTablesSync");
-	await Promise.all(
-		[
-			await db.runAsync(createSessionsTableSql.trim())
-				.then(res => 
-					console.log("setupSessionTable results: ", {...res})
-				),
+	await Promise.all([
+		await db.runAsync(createSessionsTableSql.trim())
+			.then(res => 
+				console.log("setupSessionTable results: ", {...res})
+			),
 
-			await db.runAsync(createClimbsTableSql.trim())
-				.then(res =>
-					console.log("setupClimbTable results: ", {...res})
-				),
-			await db.runAsync(pragmaWALSql)
-		]
-	)
+		await db.runAsync(createClimbsTableSql.trim())
+			.then(res =>
+				console.log("setupClimbTable results: ", {...res})
+			),
+		await db.runAsync("PRAGMA journal_mode = WAL;")
+	])
 		.then(async () => {
 			const tableNames = await db.getAllAsync("select name from sqlite_master where type='table'");
 			console.log("table names", tableNames);
@@ -219,16 +260,13 @@ const seedClimbs = async (db: SQLite.SQLiteDatabase) => {
 
 /** SECTION Prepared Statements */
 /** TABLES */
-const pragmaWALSql = "PRAGMA journal_mode = WAL;";
-const createSessionsTableSql = 
-`
+const createSessionsTableSql = `
 CREATE TABLE IF NOT EXISTS sessions (
 	id integer primary key not null,
 	sessionDate Date,
 	duration integer,
 	gym string
-);
-`;
+);`;
 
 const createClimbsTableSql = `
 CREATE TABLE IF NOT EXISTS climbs (
@@ -243,8 +281,7 @@ CREATE TABLE IF NOT EXISTS climbs (
 	dateSent Date,
 	sessions string,
 	numSessionsBeforeSend integer
-);
-`;
+);`;
 
 /** SESSIONS */
 const insertSessionSql = 
@@ -311,5 +348,7 @@ export {
 	insertClimb,
 	insertSession,
 	setupTablesAsync,
+	updateClimb,
+	updateSession,
 	dropDatabaseTablesAsync,
 };
