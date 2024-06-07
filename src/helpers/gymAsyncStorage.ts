@@ -28,7 +28,7 @@ const clearGymList = async () => {
 		await AsyncStorage.removeItem("gyms");
 
 		const gymList = await AsyncStorage.getItem("gyms");
-		console.log(`{clearGymList} Test to ensure gym list is null : ${gymList == null}`);
+		console.log(`${(new Date()).toLocaleString().split(",")[1].trim()} {clearGymList} Test to ensure gym list is null : ${gymList == null}`);
 	} catch (e) {
 		console.error("Something went wrong with clearGymList: ", e);
 	}
