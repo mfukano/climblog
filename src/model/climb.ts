@@ -1,11 +1,15 @@
 export type Climb = {
   color: string
-  discipline: string 
+  discipline: string
   grade: string
-  terrain: string[] 
+  terrain: string[]
   problemHolds: string[]
   progress: string
-  dateStarted: Date
-  dateSent: Date
+}
+
+export type ClimbDB = Climb & {
+  dateStarted: Date,
+  dateSent: Date,
+  sessions: string[]
   numSessionsBeforeSend: number
 }

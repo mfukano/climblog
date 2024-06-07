@@ -1,6 +1,10 @@
 export type Session = {
-  sessionStart: Date
-  sessionEnd: Date
+  sessionDate: string 
   duration: string
-  climbs: string[]
+  gym: string
+  // climbs: number 
+}
+
+export type SessionDB = Session & {
+  id: number
 }
