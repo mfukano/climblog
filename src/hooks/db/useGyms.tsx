@@ -1,8 +1,8 @@
 import { clearGymList, getGymList } from "@/src/helpers/gymAsyncStorage";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const useGyms = () => {
-	const [gyms, setGyms] = useState([]);
+	const [gyms, setGyms]: [string[], Dispatch<SetStateAction<string[]>>] = useState([]);
 	(async () => {
 		await clearGymList();
 		return await getGymList().then(gyms => {
