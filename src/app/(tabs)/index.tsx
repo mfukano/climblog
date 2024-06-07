@@ -1,4 +1,4 @@
-import Timer from "@/src/components/Timer";
+import Timer from "@s/components/behavioral-components/Timer";
 import * as React from "react";
 import { Text, View } from "react-native";
 

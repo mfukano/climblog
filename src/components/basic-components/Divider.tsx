@@ -1,5 +1,6 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { DefaultText } from "./TextStyles";
 
 // eslint-disable-next-line react/prop-types
 const Divider = ({ text }) => {
@@ -7,7 +8,7 @@ const Divider = ({ text }) => {
 		<View style={styles.container}>
 			<View style={styles.line} />
 			<View>
-				<Text style={styles.text}>{text}</Text>
+				<DefaultText>{text}</DefaultText>
 			</View>
 			<View style={styles.line} />
 		</View>

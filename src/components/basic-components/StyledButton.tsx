@@ -10,8 +10,6 @@ type StyledButtonProps = {
 }
 
 const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledButton({text, style, onPress}, ref)  {
-	
-
 	return (
 		<Pressable 
 			ref={ref}
@@ -31,9 +29,7 @@ const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledBu
 				}
 			]}
 		>
-			{/* <Link href={props.href ? props.href : "#"} asChild> */}
 			<Text style={styles.buttonText}>{text}</Text>
-			{/* </Link> */}
 		</Pressable>
 	);
 });

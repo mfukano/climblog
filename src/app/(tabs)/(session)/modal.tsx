@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,8 @@ import { Session } from "@/src/model/session";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 import useGyms from "@/src/hooks/db/useGyms";
 import { insertGym } from "@/src/helpers/gymAsyncStorage";
+import GymListFragment from "@/src/components/behavioral-components/GymList";
+import { DefaultText } from "@/src/components/basic-components/TextStyles";
 
 /**
  *	Modal is an intermediate step to creating a session, and part of the UI smoothing process.
@@ -16,7 +18,7 @@ import { insertGym } from "@/src/helpers/gymAsyncStorage";
  *	session in the background using that string.
  *
  *	End game: This writes a `recentGyms` line to the user's profile and allows for retrieving recent
- *	gyms. These gym entries may use geo data eventually, 
+ *	pastGyms. These gym entries may use geo data eventually, 
  *	but we don't necessarily want them to unless the user wants that.
  * @returns 
  */
@@ -25,11 +27,18 @@ export default function Modal() {
 	 * If the page was reloaded or navigated to directly, then the modal should be presented as
 	 * a full screen page. You may need to change the UI to account for this.
 	 */
-	const [gym, setGym] = React.useState("");
-	const [gyms] = useGyms();
+	
+	/*
+	 * Right now, setGym is called on every value change. I think that this
+	 * could actually be debounced and is a little bit wasteful for state update
+	 * memory, and I also think that this behavior should filter through the list
+	 * of previous pastGyms.
+	 */
+	const [currentGym, setGym] = React.useState("");
+	const [pastGyms] = useGyms();
 	const queryClient = useQueryClient();
 	const db = useSQLiteContext();
-
+	
 	const insertSessionMutation = useMutation({
 		mutationFn: (sessionToInsert: Session): Promise<number | void> => insertSession(db, sessionToInsert),
 		onSuccess: () => {
@@ -38,63 +47,59 @@ export default function Modal() {
 			router.navigate(`/${insertSessionMutation.data}/active`);
 		}
 	});
-
+	
 	/**
-	 * createNewSession occurs after the modal for gym name selection occurs.
-	 * @gym String param accepted from the modal after input.
+	 * createNewSession occurs after the modal for currentGym name selection occurs.
+	 * @currentGym String param accepted from the modal after input.
 	 */
 	async function invokeNewSessionMutation(session: Session = null) {
-	// gym: string
+		// currentGym: string
 		console.log("invoking createNewSession");
-	
+		
 		const sessionToInsert: Session = session || {
-			gym: gym,
+			gym: currentGym,
 			duration: "0",
 			sessionDate: (new Date()).toString()
 		};
-		await insertGym(gym, gyms).then(() => insertSessionMutation.mutate(sessionToInsert));
+		await insertGym(currentGym, pastGyms).then(() => insertSessionMutation.mutate(sessionToInsert));
 	}
-
+	
 	const isPresented = router.canGoBack();
+	
 	return (
 		<View style={styles.wrapper}>
 			<View style={styles.formContainer}>
-				<Text style={styles.text}>Which gym are you climbing at today?</Text>
+				<DefaultText>Which gym are you climbing at today?</DefaultText>
 				<TextInput 
 					style={styles.textInput}
 					placeholder="Dogpatch Boulders" 
 					onChangeText={setGym}
-					value={gym}
+					value={currentGym}
 				/>
 				<StyledButton text={"Start climbing!"} onPress={() => invokeNewSessionMutation()} /> 
-
+		
 				{/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
 				{!isPresented && <Link href="../">Dismiss</Link>}
 				{/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
 				<StatusBar style="light" />
 			</View>
 			<View style={styles.scrollViewContainer}>
-				{gyms && gyms.length > 0 
+				{pastGyms && pastGyms.length > 0 
 					? (
-						<View>
-							<Text style={styles.text}>Or choose a gym from the list:</Text>
-							<ScrollView>
-								{gyms.map((gym, idx) => (<Text style={styles.text} key={`gym-${idx}`}>{gym}</Text>))}
-							</ScrollView>
-						</View>
+						<GymListFragment currentGym={currentGym}/>
 					)
 					: (
-						<Text style={styles.text}>
+						<DefaultText>
 							You haven&apos;t been to any gyms yet!
-							Please enter a gym name instead.
-						</Text>
+							Please enter a currentGym name instead.
+						</DefaultText>
 					)}
 			</View>
-
+			
 		</View>
 	);
 }
-
+	
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
