@@ -1,5 +1,6 @@
 # climblog
 
+## What is this?
 Partially a Kaya climbing clone. Climb logging, data vis of climb data and general metrics about performance / consistency.
 
 I was inspired by the Kaya climbing app, but when I climb I like to think through my performance on a climb and I think other people might enjoy that too.
