@@ -1,8 +1,9 @@
 export type Session = {
-  sessionDate: string 
-  duration: string
-  gym: string
-  // climbs: number 
+  gymName: string
+  startDateTime: string 
+  duration?: number 
+  isActive?: boolean
+  endDateTime?: string 
 }
 
 export type SessionDB = Session & {
