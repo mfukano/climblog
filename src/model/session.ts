@@ -1,8 +1,9 @@
 export type Session = {
-  sessionDate: string 
-  duration: string
-  gym: string
-  // climbs: number 
+  gymName: string
+  startDateTime: string 
+  duration?: number 
+  isActive?: boolean
+  endDateTime?: string 
 }
 /*
  * session should be able to determine if it's actively running or not
