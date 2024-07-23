@@ -3,6 +3,8 @@ import { StyleSheet, ScrollView, Text, View } from "react-native";
 import useSessions from "@/src/hooks/db/useSessions";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 import { Link } from "expo-router";
+import { formatDate } from "@/src/helpers/dateHelper";
+import Card from "@/src/components/basic-components/Card";
 
 // TODO: I need to set up StackProps before I can run this through the linter
 // eslint-disable-next-line react/prop-types
@@ -34,11 +36,20 @@ export default function ManageSessions() {
 			</Link>
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
-					<View style={styles.climbItemContainer} key={index}>
+					<Card style={{...styles.climbItemContainer}} key={index}>
+
+						{/* <View style={styles.climbItemContainer} key={index}> */}
 						<Text style={styles.climbItemHeader}>
 							{JSON.stringify(session)}
 						</Text>
-					</View>
+						<Text>
+							{formatDate(session.startDateTime)}
+						</Text>
+						<Text>
+							{session.gymName}
+						</Text>
+						{/* </View> */}
+					</Card>
 				))}
 			</View>
 		</ScrollView>
@@ -47,9 +58,11 @@ export default function ManageSessions() {
 
 const styles = StyleSheet.create({
 	container: {
+		display: "flex",
+		flexDirection: "column",
 		alignItems: "center",
-		margin: 20,
 		marginBottom: 50,
+		width: "100%",
 	},
 	climbListContainer: {
 		marginTop: 10,
@@ -59,7 +72,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		padding: 10,
 		borderRadius: 3,
-		margin: 10,
+		marginTop: 10,
+		width: "100%",
 	},
 	climbItemHeader: {
 		fontWeight: "bold",

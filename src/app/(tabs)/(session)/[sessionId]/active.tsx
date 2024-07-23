@@ -1,31 +1,51 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { View, Text, ScrollView, Button, StyleSheet } from "react-native";
-import { Link, useGlobalSearchParams } from "expo-router";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { Link, useLocalSearchParams } from "expo-router";
 import useClimbsBySession from "@/src/hooks/db/useClimbsBySession";
+import { ErrorRetrievingClimbs, NoClimbsForSession } from "@/src/components/page-errors/ClimbsPages";
+import StyledButton from "@/src/components/basic-components/StyledButton";
 
 export default function ActiveSessionPage() {
 	// Session ID to be passed to NewSession after creating on /manage
-	const { sessionId } = useGlobalSearchParams<{ sessionId: string }>();
+	const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
 	const climbsBySesh = useClimbsBySession(parseInt(sessionId));
 
+	console.log(`check session ID existence: ${sessionId}`);
+	console.log(`data is null?: ${climbsBySesh.data === null ? true : false}`);
+	console.log(JSON.stringify(climbsBySesh));
 	console.log(`session data: ${JSON.stringify(climbsBySesh?.data)}`);
 
+	/*
+	 * if (!climbsBySesh.isLoading && !climbsBySesh.isSuccess) {
+	 * 	return (
+	 * 		<ScrollView contentContainerStyle={styles.container}>
+	 * 			<Link href="/logging" asChild>
+	 * 				<StyledButton text={"Log a Climb"} />	
+	 * 			</Link>
+	 * 			<ErrorRetrievingClimbs />
+	 * 		</ScrollView>
+	 * 	);
+	 * }
+	 */
+	/**
+	 *	check length and return  
+	 */
+	// }
 	if (!climbsBySesh?.data || !climbsBySesh?.data.length) {
 		return (
-			<View>
-				<Text>Error</Text>
-				<Text>
-					There has been an error retrieving the climbs from the
-					database.
-				</Text>
-			</View>
+			<ScrollView contentContainerStyle={styles.container}>
+				<Link href="/logging" asChild>
+					<StyledButton text={"Log a Climb"} />	
+				</Link>
+				<NoClimbsForSession />
+			</ScrollView>
 		);
 	} else {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
 				<Link href="/logging" asChild>
-					<Button title={"Log a Climb"} color={"blue"} />
+					<StyledButton text={"Log a Climb"} />
 				</Link>
 				<View style={styles.climbListContainer}>
 					{climbsBySesh?.data?.map((climb, index) => (
