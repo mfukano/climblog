@@ -1,11 +1,11 @@
-import * as React from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { terrainTypes } from "../../constants/terrainTypes";
 import Checkbox from "../basic-components/Checkbox";
 
 interface TerrainProps {
-	terrain: Array<string>;
-	setTerrain: React.Dispatch<React.SetStateAction<Array<string>>>;
+	terrain: Array<string>
+	setTerrain: React.Dispatch<React.SetStateAction<Array<string>>>
 }
 
 export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
