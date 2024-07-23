@@ -12,7 +12,14 @@ function useClimbsBySession(sessionId: number) {
 			getClimbsBySessionId(db, sessionId)
 	});
 
-	console.log(query.error, "Error");
+	if (query.error != null) {
+		const errMsg = `There was an error getting climbs by session id: ${query.error}`;
+		throw new Error(errMsg);
+	} else {
+		console.log(`printing query result:
+			${JSON.stringify(query!)}
+		`);
+	}
 
 	return query;
 }
