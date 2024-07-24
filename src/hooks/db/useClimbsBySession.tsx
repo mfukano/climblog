@@ -13,13 +13,14 @@ function useClimbsBySession(sessionId: number) {
 	});
 
 	if (query.error != null) {
-		const errMsg = `There was an error getting climbs by session id: ${query.error}`;
-		throw new Error(errMsg);
+		console.log(`check query status: ${query.status}`);
 	} else {
 		console.log(`printing query result:
 			${JSON.stringify(query!)}
 		`);
 	}
+
+	console.log(`check query.data: ${JSON.stringify(query.data)}`);
 
 	return query;
 }
