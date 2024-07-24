@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import useClimbsBySession from "@/src/hooks/db/useClimbsBySession";
-import { ErrorRetrievingClimbs, NoClimbsForSession } from "@/src/components/page-errors/ClimbsPages";
+import { NoClimbsForSession } from "@/src/components/page-errors/ClimbsPages";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 
 export default function ActiveSessionPage() {
@@ -12,9 +12,6 @@ export default function ActiveSessionPage() {
 	const climbsBySesh = useClimbsBySession(parseInt(sessionId));
 
 	console.log(`check session ID existence: ${sessionId}`);
-	console.log(`data is null?: ${climbsBySesh.data === null ? true : false}`);
-	console.log(JSON.stringify(climbsBySesh));
-	console.log(`session data: ${JSON.stringify(climbsBySesh?.data)}`);
 
 	/*
 	 * if (!climbsBySesh.isLoading && !climbsBySesh.isSuccess) {
@@ -35,7 +32,7 @@ export default function ActiveSessionPage() {
 	if (!climbsBySesh?.data || !climbsBySesh?.data.length) {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
-				<Link href="/logging" asChild>
+				<Link href={`/logging?sessionId=${sessionId}`} asChild>
 					<StyledButton text={"Log a Climb"} />	
 				</Link>
 				<NoClimbsForSession />
@@ -44,7 +41,7 @@ export default function ActiveSessionPage() {
 	} else {
 		return (
 			<ScrollView contentContainerStyle={styles.container}>
-				<Link href="/logging" asChild>
+				<Link href={`/logging?sessionId=${sessionId}`} asChild>
 					<StyledButton text={"Log a Climb"} />
 				</Link>
 				<View style={styles.climbListContainer}>
