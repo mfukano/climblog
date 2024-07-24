@@ -176,6 +176,7 @@ const getClimbsBySessionId = async (
 	sessionId: number
 ) => { 
 	console.log("GET CLIMBS BY SESSION ID");
+	console.log(`check sessionId before calling getClimbsBySessionId: ${sessionId}`);
 	const res = await db.getAllAsync<ClimbDB>(getClimbsBySessionIdSql, {
 		$sessionId: sessionId
 	});
@@ -183,7 +184,14 @@ const getClimbsBySessionId = async (
 		? "There were no records to retrieve, but the query was successful"
 		: `Retrieved ${res.length} records: ${JSON.stringify(res)}`);
 
-	console.log("res", JSON.stringify(res));
+	console.log(`printing res at the end of getClimbsBySessionId: ${JSON.stringify(res)}`);
+	return res;
+};
+
+const getClimbs = async (
+	db: SQLite.SQLiteDatabase,
+) => {
+	const res = await db.getAllAsync<ClimbDB>("select * from climbs order by id desc");
 	return res;
 };
 
@@ -194,7 +202,7 @@ const getClimb = async (db: SQLite.SQLiteDatabase) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const insertClimb = async (
 	db: SQLite.SQLiteDatabase,
-	climb: ClimbDB
+	climb: Climb
 ) => {
 	const result = await db.runAsync(insertClimbSql, {
 		$color: climb.color,
@@ -206,6 +214,9 @@ const insertClimb = async (
 		$dateStarted: new Date().toDateString(),
 		$dateSent: climb.progress === "sent"
 			? new Date().toDateString()
+			: null,
+		$numSessionsBeforeSend: climb.progress === "sent"
+			? climb.sessions.length
 			: null,
 		$sessions: JSON.stringify(climb.sessions),
 	});
@@ -336,7 +347,7 @@ const seedClimbs = async (db: SQLite.SQLiteDatabase) => {
 		$progress: "sent",
 		$dateStarted: "Mon Jan 1 2024 00:00:00",
 		$dateSent: "Mon Jan 1 2024 00:00:00",
-		$sessions: "",
+		$sessions: JSON.stringify([1]),
 		$numSessionsBeforeSend: 1
 	})
 		.then(res => {
@@ -350,27 +361,27 @@ const seedClimbs = async (db: SQLite.SQLiteDatabase) => {
 /** TABLES */
 const createSessionsTableSql = `
 CREATE TABLE IF NOT EXISTS sessions (
-	id integer primary key not null,
-	startDateTime Date,
-	endDateTime Date,
-	duration integer,
-	gymName string,
-	isActive integer
+	id INTEGER PRIMARY KEY NOT NULL,
+	startDateTime DATE,
+	endDateTime DATE,
+	duration NUMERIC,
+	gymName TEXT,
+	isActive BOOLEAN 
 );`;
 				
 const createClimbsTableSql = `
 CREATE TABLE IF NOT EXISTS climbs (
-	id integer primary key not null,
-	color string,
-	discipline string,
-	grade string,
-	terrain string,
-	problemHolds string,
-	progress string,
-	dateStarted Date,
-	dateSent Date,
-	sessions string,
-	numSessionsBeforeSend integer
+	id INTEGER PRIMARY KEY NOT NULL,
+	color TEXT,
+	discipline TEXT,
+	grade TEXT,
+	terrain TEXT,
+	problemHolds TEXT,
+	progress TEXT,
+	dateStarted DATE,
+	dateSent DATE,
+	sessions TEXT,
+	numSessionsBeforeSend INTEGER
 );`;
 				
 /** SESSIONS */
@@ -425,16 +436,24 @@ VALUES (
 )
 RETURNING *`;
 				
+// Changing the WHERE clause to try and solve getClimbsBySessionSql
 const getClimbsBySessionIdSql =
 `SELECT * 
-FROM climbs
-WHERE exists (
-	SELECT 1 from json_each(sessions) WHERE VALUE = $sessionId
+FROM climbs c
+WHERE EXISTS(
+	SELECT * from json_each(c.sessions) WHERE VALUE = $sessionId
 )
-order by id desc;`;
-				
+order by id desc
+`;
+
+/*
+ * exists (
+ * 	SELECT 1 from json_each(climbs.sessions) WHERE VALUE LIKE $sessionId
+ * )
+ */
 /** SECTION Exports */
 export {
+	getClimbs,
 	getClimbsBySessionId,
 	getSessions,
 	insertClimb,
