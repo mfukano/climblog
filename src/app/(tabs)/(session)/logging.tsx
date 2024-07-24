@@ -13,14 +13,14 @@ import {
 	ProblematicHoldsPicker,
 } from "@s/components/logging-selectors";
 import { Divider } from "@s/components/basic-components";
-import { climbsStore } from "@s/store/climbStore";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Card from "@/src/components/basic-components/Card";
 import { backgroundColorLight } from "@/src/constants/Colors";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Climb } from "@/src/model/climb";
-import { insertGym } from "@/src/helpers/gymAsyncStorage";
+import { insertClimb } from "@/src/db/sqlite";
+import { useSQLiteContext } from "expo-sqlite";
 
 // TODO: I need to set up StackProps before react navigation can pass through the linter
 // eslint-disable-next-line react/prop-types
@@ -36,38 +36,53 @@ import { insertGym } from "@/src/helpers/gymAsyncStorage";
  * @returns nothing, but inserts a climb into the database to be pulled later. 
  */
 export default function LoggingScreen() {
+	const db = useSQLiteContext();
 	const queryClient = useQueryClient();
+
+	const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
 	const [color, setColor] = useState("Red");
 	const [climbingDiscipline, setClimbingDiscipline] = useState("Boulder");
 	const [grade, setGrade] = useState("V0");
 	const [terrain, setTerrain] = useState([]);
 	const [problemHolds, setProblemHolds] = useState([]);
 	const [progress, setProgress] = useState("Projecting");
-	const [climb, setClimb] = useState({});
+	const [climb, setClimb] = useState({
+		"color": color,
+		"discipline": climbingDiscipline,
+		"grade": grade,
+		"progress": progress,
+		"problemHolds": problemHolds,
+		"terrain": terrain,
+		"sessions": [parseInt(sessionId)]
+	});
 
 	useEffect(() => {
 		setClimb({
+			...climb,
 			"color": color,
-			"climbingDiscipline": climbingDiscipline,
+			"discipline": climbingDiscipline,
 			"grade": grade,
 			"progress": progress,
 			"problemHolds": problemHolds,
-			"terrain": terrain
+			"terrain": terrain,
 		});
-	}, [setColor, setClimbingDiscipline, setGrade, setTerrain, setProblemHolds, setProgress]);
+	}, [color, climbingDiscipline, grade, terrain, problemHolds, progress]);
 	
 	const insertClimbMutation = useMutation({
-		mutationFn: (climbToInsert: Climb): Promise<number | void> => insertClimb(db, climbToInsert),
+		mutationFn: (climb: Climb): Promise<void> => insertClimb(db, climb),
 	
 		/*
 		 *  NOTE - We don't actually have to return the climbId because the 
 		 *  following action isn't dependent on the climbId created by DB insertion.
 		 */
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["sessions"]});
-			router.dismissAll();
-			// router.navigate(`${sessionId}/active`);
-			router.back();
+			console.log("insertClimbMutation success");
+			queryClient.invalidateQueries({ queryKey: ["climbs"] });
+			// router.back();
+		},
+		onSettled: () => {
+			router.navigate(`${sessionId}/active`);
+
 		}
 	});
 
@@ -79,32 +94,14 @@ export default function LoggingScreen() {
 	 * createNewSession occurs after the modal for currentGym name selection occurs.
 	 * @currentGym String param accepted from the modal after input.
 	 */
-	async function invokeNewClimbMutation(climb) {
+	async function invokeNewClimbMutation() {
 		console.log("invoking {newClimbMutation}");
-	
-		const climbToInsert: Climb = climb || {
-			color: color
-		};
-		await insertClimbMutation.mutate(climbToInsert);
+		console.log(`check climb to insert:
+			${JSON.stringify(climb)}
+		`);
+		await insertClimbMutation.mutateAsync(climb);
 	}
 	
-	const handleSubmit = () => {
-		climbsStore.addClimb({
-			color: color,
-			discipline: climbingDiscipline,
-			grade: grade,
-			terrain: terrain,
-			problemHolds: problemHolds,
-			progress: progress,
-		});
-		async function createClimb () {
-
-		}
-		createClimb();
-		// eslint-disable-next-line react/prop-types
-		router.back();
-	};
-
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<Card style={{marginTop: 10}}>
@@ -142,7 +139,7 @@ export default function LoggingScreen() {
 				<ProgressPicker progress={progress} setProgress={setProgress} />
 			</Card>
 
-			<StyledButton style={{marginTop: 20}} text={"Submit Climb"} onPress={handleSubmit} />
+			<StyledButton style={{marginTop: 20}} text={"Submit Climb"} onPress={invokeNewClimbMutation} />
 
 			<Card style={{marginTop: 20, marginBottom: 30}}>
 				<Divider text={"Page State"} />
