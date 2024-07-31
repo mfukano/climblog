@@ -5,7 +5,7 @@ export type Climb = {
   terrain: string[]
   problemHolds: string[]
   progress: string
-  sessions: string[]
+  sessions: number[]
 }
 
 export type ClimbDB = Climb & {
