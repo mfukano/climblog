@@ -1,11 +1,12 @@
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { terrainTypes } from "../../constants/terrainTypes";
 import Checkbox from "../basic-components/Checkbox";
+import styles from "./styles";
 
 interface TerrainProps {
-	terrain: Array<string>;
-	setTerrain: React.Dispatch<React.SetStateAction<Array<string>>>;
+	terrain: Array<string>
+	setTerrain: React.Dispatch<React.SetStateAction<Array<string>>>
 }
 
 export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
@@ -38,20 +39,3 @@ export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "row",
-		marginTop: 10,
-	},
-	columnContainer: {
-		display: "flex",
-		flexDirection: "row",
-		gap: 20,
-	},
-	column: {
-		gap: 10,
-	},
-});

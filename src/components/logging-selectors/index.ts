@@ -11,5 +11,5 @@ export {
 	GradePicker,
 	ProblematicHoldsPicker,
 	ProgressPicker,
-	TerrainPicker
+	TerrainPicker,
 };

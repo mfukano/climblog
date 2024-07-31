@@ -3,9 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const insertGym = async (gym: string, gyms: string[]) => {
 	try {
 		if (!gyms || !gyms.includes(gym)) {
-			const gymsToWrite = JSON.stringify([...gyms, gym]);
+			const gymsToWrite = (!gyms || gyms.length === 0) 
+				? JSON.stringify([gym])
+				: JSON.stringify([...gyms, gym]);
 			await AsyncStorage.setItem("gyms", gymsToWrite);
 		}
+		console.log(await AsyncStorage.getItem("gyms"));
 	} catch (e) {
 		console.log("Either gym was already included in the list of gyms, or something went wrong.");
 		console.warn(e);

@@ -12,7 +12,15 @@ function useClimbsBySession(sessionId: number) {
 			getClimbsBySessionId(db, sessionId)
 	});
 
-	console.log(query.error, "Error");
+	if (query.error != null) {
+		console.log(`check query status: ${query.status}`);
+	} else {
+		console.log(`printing query result:
+			${JSON.stringify(query!)}
+		`);
+	}
+
+	console.log(`check query.data: ${JSON.stringify(query.data)}`);
 
 	return query;
 }

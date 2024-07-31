@@ -16,6 +16,15 @@ import { DefaultText } from "@/src/components/basic-components/TextStyles";
  *	Modal is an intermediate step to creating a session, and part of the UI smoothing process.
  *	When a user wants to start a session, we ask which gym they want to climb at, and create the 
  *	session in the background using that string.
+ * 
+ * 	If the page was reloaded or navigated to directly, then the modal should be presented as
+ * 	a full screen page. You may need to change the UI to account for this.
+ * 
+ * 	!BUG: 
+ * 	Right now, setGym is called on every value change. I think that this
+ * 	could actually be debounced and is a little bit wasteful for state update
+ * 	memory, and I also think that this behavior should filter through the list
+ * 	of previous pastGyms.
  *
  *	End game: This writes a `recentGyms` line to the user's profile and allows for retrieving recent
  *	pastGyms. These gym entries may use geo data eventually, 
@@ -23,17 +32,6 @@ import { DefaultText } from "@/src/components/basic-components/TextStyles";
  * @returns 
  */
 export default function Modal() {
-	/*
-	 * If the page was reloaded or navigated to directly, then the modal should be presented as
-	 * a full screen page. You may need to change the UI to account for this.
-	 */
-	
-	/*
-	 * Right now, setGym is called on every value change. I think that this
-	 * could actually be debounced and is a little bit wasteful for state update
-	 * memory, and I also think that this behavior should filter through the list
-	 * of previous pastGyms.
-	 */
 	const [currentGym, setGym] = React.useState("");
 	const [pastGyms] = useGyms();
 	const queryClient = useQueryClient();
@@ -41,10 +39,11 @@ export default function Modal() {
 	
 	const insertSessionMutation = useMutation({
 		mutationFn: (sessionToInsert: Session): Promise<number | void> => insertSession(db, sessionToInsert),
-		onSuccess: () => {
+		onSuccess: (sessionId) => {
+			console.log(`checking returns after inserting session: ${sessionId}`);
 			queryClient.invalidateQueries({ queryKey: ["sessions"]});
 			router.dismissAll();
-			router.navigate(`/${insertSessionMutation.data}/active`);
+			router.navigate(`${sessionId}/active`);
 		}
 	});
 	
@@ -56,10 +55,11 @@ export default function Modal() {
 		// currentGym: string
 		console.log("invoking createNewSession");
 		
+		// This needs to be updated to the new session model shape
 		const sessionToInsert: Session = session || {
-			gym: currentGym,
-			duration: "0",
-			sessionDate: (new Date()).toString()
+			gymName: currentGym,
+			duration: 0,
+			startDateTime: (new Date()).toString()
 		};
 		await insertGym(currentGym, pastGyms).then(() => insertSessionMutation.mutate(sessionToInsert));
 	}
@@ -91,7 +91,7 @@ export default function Modal() {
 					: (
 						<DefaultText>
 							You haven&apos;t been to any gyms yet!
-							Please enter a currentGym name instead.
+							Please enter a gym name instead.
 						</DefaultText>
 					)}
 			</View>

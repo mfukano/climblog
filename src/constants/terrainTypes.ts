@@ -1,9 +1,8 @@
 export const terrainTypes = [
 	"Arete",
-	"Buttress",
 	"Chimney",
 	"Corner",
-	"Off-width",
+	"Crack",
 	"Overhang",
 	"Slab"
 ];

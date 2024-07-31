@@ -6,11 +6,7 @@ import { DefaultText } from "./TextStyles";
 const Divider = ({ text }) => {
 	return (
 		<View style={styles.container}>
-			<View style={styles.line} />
-			<View>
-				<DefaultText>{text}</DefaultText>
-			</View>
-			<View style={styles.line} />
+			<DefaultText>{text}</DefaultText>
 		</View>
 	);
 };
@@ -19,17 +15,26 @@ const styles = StyleSheet.create({
 	container: {
 		alignItems: "center",
 		flexDirection: "row",
+		borderBottomWidth: 1,
+		padding: 15,
+		width: "100%",
+		textAlign: "center",
+		justifyContent: "center"
 	},
-	line: {
-		backgroundColor: "black",
-		flex: 1,
-		height: 1,
-	},
+	/*
+	 * line: {
+	 * 	backgroundColor: "black",
+	 * 	flex: 1,
+	 * 	height: 1,
+	 * 	// margin: 20,
+	 * 	width: "100%",
+	 * },
+	 */
 	text: {
 		fontSize: 20,
 		margin: 20,
 		textAlign: "center",
-		width: 120,
+		width: "100%",
 	},
 });
 
