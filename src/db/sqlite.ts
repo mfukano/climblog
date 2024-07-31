@@ -321,11 +321,23 @@ const dbSanityCheck = async (db: SQLite.SQLiteDatabase) => {
 				
 const seedSessions = async (db: SQLite.SQLiteDatabase) => {
 	console.log("seeding sessions");
-	await db.runAsync(insertSessionSql, {
-		$startDateTime: "Mon Jan 1 2024 00:00:00",
-		$duration: 120,
-		$gymName: "Dogpatch Boulders",
-	})
+	await db.runAsync(
+		`insert into sessions (
+			startDateTime,
+			endDateTime,
+			duration,
+			gymName,
+			isActive
+		) values (
+		 	?, ?, ?, ?, ?
+		)`, [
+			"Mon Jan 1 2024 00:00:00",
+			3600,
+			"Mon Jan 1 2024 01:00:00",
+			"Dogpatch Boulders",
+			false
+		]
+	)
 		.then(res => {
 			console.log("seedSessions should be completed; below is the returned rows");
 			console.log(res.lastInsertRowId, res.changes);
