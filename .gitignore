@@ -36,6 +36,9 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+.prettierrc
+.eslintignore
+.nvmrc
 
 # BUCK
 buck-out/
@@ -64,9 +67,7 @@ buck-out/
 web-build/
 expo-env.d.ts
 
-# Shame
+# Personal 
 *.code-workspace
 DEVLOG.md
-.prettierrc
 Climblog.drawio
-.nvmrc
