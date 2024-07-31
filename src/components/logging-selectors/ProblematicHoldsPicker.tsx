@@ -1,7 +1,8 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import Checkbox from "../basic-components/Checkbox";
 import { holdTypes } from "../../constants/holdTypes";
+import styles from "./styles";
 
 interface ProblematicProps {
 	problemHolds: Array<string>;
@@ -41,21 +42,3 @@ export default function ProblematicHoldsPicker({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "row",
-		marginTop: 10,
-	},
-	columnContainer: {
-		display: "flex",
-		flexDirection: "row",
-		gap: 20,
-	},
-	column: {
-		gap: 10,
-		marginRight: 7,
-	},
-});

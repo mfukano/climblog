@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Picker } from "@react-native-picker/picker";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
+import styles from "./styles";
 
 interface DisciplineProps {
 	climbingDiscipline: string;
@@ -26,18 +27,3 @@ export default function ClimbingDisciplinePicker({
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	picker: {
-		flex: 1,
-	},
-	pickerItem: {
-		height: 120,
-	},
-});
