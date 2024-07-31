@@ -1,6 +1,6 @@
 {
 	"name": "climblog",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"main": "expo-router/entry",
 	"scripts": {
 		"dev": "npx expo start -ci",
