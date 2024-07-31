@@ -22,6 +22,14 @@ const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
+/**
+ *	Layout is the file I've decided that Expo wants as its "provider core". 
+ * 	This file establishes a lot of things:
+ * - The database on launch, if it doesn't already exist (`useDatabase()`)
+ * - Font and style through `ThemeProvider` and `useFonts`
+ * - The DOM tree, abstracted through `RootLayoutNav`
+ * @returns <RootLayoutNav>, a TSX provider setter for the application.
+ */
 export default function RootLayout() {
 	const {createDB, isDBLoading} = useDatabase();
 	const [loaded, error] = useFonts({
@@ -57,6 +65,14 @@ export default function RootLayout() {
 	return <RootLayoutNav />;
 }
 
+/**
+ * This is the "entry point" or the location where
+ * - The initial view Stack is established
+ * - All providers are setup; database, queryclient, theme
+ * - Suspense is added to the shadow DOM and provides fallbacks for loaders
+ * 
+ * @returns RootLayout DOM tree 
+ */
 function RootLayoutNav() {
 	const colorScheme = useColorScheme();
 
