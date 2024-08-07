@@ -334,8 +334,8 @@ const seedSessions = async (db: SQLite.SQLiteDatabase) => {
 		 	?, ?, ?, ?, ?
 		)`, [
 			"Mon Jan 1 2024 00:00:00",
-			3600,
 			"Mon Jan 1 2024 01:00:00",
+			3600,
 			"Dogpatch Boulders",
 			false
 		]
