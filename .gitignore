@@ -70,4 +70,5 @@ expo-env.d.ts
 # Personal 
 *.code-workspace
 DEVLOG.md
-Climblog.drawio
+.VSCodeCounter
+diagrams/

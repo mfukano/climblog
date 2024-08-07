@@ -3,7 +3,7 @@ import { Asset } from "expo-asset";
 import React from "react";
 
 import { dropDatabaseTablesAsync, setupTablesAsync } from "@s/db/sqlite";
-import { openDatabaseAsync} from "expo-sqlite";
+import { openDatabaseAsync } from "expo-sqlite";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const localDatabase = require("@/assets/db/climblog.db");
