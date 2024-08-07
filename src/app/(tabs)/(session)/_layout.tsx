@@ -16,21 +16,6 @@ export default function NavStack() {
 					title: "Manage Sessions",
 				}}
 			/>
-			{/* <Stack.Screen
-				name="active"
-				options={{
-					title: "Active Session",
-					headerLeft: () => (
-						<Pressable onPress={() => router.back()}>
-							<Feather
-								name="arrow-left"
-								size={28}
-								color={"#333"}
-							/>
-						</Pressable>
-					),
-				}}
-			/> */}
 			<Stack.Screen
 				name="logging"
 				options={{
