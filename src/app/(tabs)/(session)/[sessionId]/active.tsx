@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import useClimbsBySession from "@/src/hooks/db/useClimbsBySession";
 import { NoClimbsForSession } from "@/src/components/page-errors/ClimbsPages";
 import StyledButton from "@/src/components/basic-components/StyledButton";
@@ -10,8 +10,16 @@ export default function ActiveSessionPage() {
 	// Session ID to be passed to NewSession after creating on /manage
 	const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
 	const climbsBySesh = useClimbsBySession(parseInt(sessionId));
+	const navigation = useNavigation();
 
 	console.log(`check session ID existence: ${sessionId}`);
+
+	useEffect(() => {
+		navigation.setOptions({ 
+			title: "Active Session",
+			headerBackTitle: "Sessions",
+		});
+	}, [navigation]);	
 
 	/*
 	 * if (!climbsBySesh.isLoading && !climbsBySesh.isSuccess) {
