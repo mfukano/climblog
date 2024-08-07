@@ -7,16 +7,27 @@ type StyledButtonProps = {
 	text: string
 	style?: object
 	onPress?: () => void 
+	variant?: string
 }
 
-const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledButton({text, style, onPress}, ref)  {
+const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledButton({text, style, onPress, variant}, ref)  {
+	let buttonStyle, textStyle;
+	if (variant === "small") {
+		buttonStyle = {...styles.viewButtonSmall};
+		textStyle = {...styles.buttonTextSmall};
+	} else {
+		buttonStyle = {...styles.viewButtonLarge};
+		textStyle = {...styles.buttonTextLarge};
+	}
+
 	return (
 		<Pressable 
 			ref={ref}
 			onPress={onPress}
 			style={({pressed}) => [
 				{
-					...styles.viewButton,
+					...styles.viewButtonBase,
+					...buttonStyle,
 					...style,
 					opacity: pressed ? 0.7 : 1,
 					shadowRadius: pressed ? 2 : 0,
@@ -29,32 +40,42 @@ const StyledButton = React.forwardRef<View, StyledButtonProps>(function StyledBu
 				}
 			]}
 		>
-			<Text style={styles.buttonText}>{text}</Text>
+			<Text style={{
+				...styles.buttonTextBase,
+				...textStyle
+			}}>{text}</Text>
 		</Pressable>
 	);
 });
 StyledButton.displayName = "StyledButton";
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	viewButton: {
-		padding: 10,
+	viewButtonBase: {
 		backgroundColor: STYLED_BLUE,
 		borderRadius: 5,
-		paddingVertical: 12,
-		paddingHorizontal: 32,
 		elevation: 3,
 		alignItems: "center",
 	},
-	buttonText: {
-		fontSize: 20,
+	viewButtonSmall: {
+		padding: 4,
+		paddingVertical: 8,
+		paddingHorizontal: 16,
+		margin: 6
+	},
+	viewButtonLarge: {
+		paddingVertical: 20,
+		paddingHorizontal: 32,
+		margin: 20,
+	},
+	buttonTextBase: {
 		color: "#fff",
-		padding: 10,
 		fontWeight: "bold",
+	},
+	buttonTextSmall: {
+		fontSize: 14
+	},
+	buttonTextLarge: {
+		fontSize: 20,
 	}
 });
 

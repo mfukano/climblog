@@ -1,9 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-interface CardProps {
-	children: React.ReactNode,
+type CardProps = {
+	children: React.ReactNode
 	style?: object
+	ref?: React.ForwardedRef<string>
 }
 
 const Card = ({children, style}: CardProps) => {
