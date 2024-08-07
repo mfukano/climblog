@@ -37,7 +37,6 @@ export default function ManageSessions() {
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
 					<Card style={{...styles.climbItemContainer}} key={index}>
-
 						{/* <View style={styles.climbItemContainer} key={index}> */}
 						<Text style={styles.climbItemHeader}>
 							{JSON.stringify(session)}
@@ -49,6 +48,10 @@ export default function ManageSessions() {
 							{session.gymName}
 						</Text>
 						{/* </View> */}
+
+						<Link href={`${session.id}/active`} key={session.id} asChild>
+							<StyledButton ref={ref} text={"View session"} variant={"small"} />
+						</Link>
 					</Card>
 				))}
 			</View>
@@ -65,15 +68,15 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	climbListContainer: {
-		marginTop: 10,
 		width: "100%",
+		marginTop: -10,
 	},
 	climbItemContainer: {
 		backgroundColor: "white",
 		padding: 10,
 		borderRadius: 3,
-		marginTop: 10,
 		width: "100%",
+		marginTop: 10,
 	},
 	climbItemHeader: {
 		fontWeight: "bold",

@@ -30,6 +30,15 @@ import { useSQLiteContext } from "expo-sqlite";
  * This may need access to sessionId in order to correctly route back to the active
  * session, but maybe something like `router.back()` would work instead. 
  * 
+ * Logging screen likely also needs optional access to the climbing ID or model; 
+ * if loading by the climb ID, the only mutable fields should be:
+ * 	- problemHolds
+ *  - terrain (maybe?)
+ *  - progress
+ * 
+ * On update submit, if the current sessionId is NOT contained within sessions[],
+ * we should add it. 
+ * 
  * However, in order to add the sessionId into the sessions[] array that lives on Climb,
  * it would be a nice-to-have and a reasonable place to update this array so we can search
  * for climbs by session later.
@@ -82,7 +91,6 @@ export default function LoggingScreen() {
 		},
 		onSettled: () => {
 			router.navigate(`${sessionId}/active`);
-
 		}
 	});
 
