@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, Text, View } from "react-native";
 import useSessions from "@/src/hooks/db/useSessions";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 import { Link } from "expo-router";
-import { formatDate } from "@/src/helpers/dateHelper";
+import { formatDate, formatTime } from "@/src/helpers/dateHelper";
 import Card from "@/src/components/basic-components/Card";
 
 // TODO: I need to set up StackProps before I can run this through the linter
@@ -37,17 +37,19 @@ export default function ManageSessions() {
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
 					<Card style={{...styles.climbItemContainer}} key={index}>
-						{/* <View style={styles.climbItemContainer} key={index}> */}
 						<Text style={styles.climbItemHeader}>
-							{JSON.stringify(session)}
+							{/* For debugging session model {JSON.stringify(session)} */}
+							{session.gymName}
 						</Text>
 						<Text>
 							{formatDate(session.startDateTime)}
 						</Text>
 						<Text>
-							{session.gymName}
+							{formatTime(session.duration)}
 						</Text>
-						{/* </View> */}
+						{session.isActive === true &&
+						<Text>Active</Text>
+						}
 
 						<Link href={`${session.id}/active`} key={session.id} asChild>
 							<StyledButton ref={ref} text={"View session"} variant={"small"} />
