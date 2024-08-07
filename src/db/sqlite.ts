@@ -296,10 +296,12 @@ const setupTablesAsync = async (db: SQLite.SQLiteDatabase) => {
 	await createTablesAsync(db);
 				
 	try {
-		await seedSessions(db);
-		await seedClimbs(db);
-					
-		await dbSanityCheck(db);
+		Promise.all([
+			seedSessions(db), 
+			seedClimbs(db), 
+		]).then(() => 
+			dbSanityCheck(db)
+		);
 	} catch (e) {
 		console.error("Issue in seeding tables: ", e);
 	} finally {
