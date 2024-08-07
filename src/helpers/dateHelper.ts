@@ -33,3 +33,17 @@ export function formatDate(date: string) {
 
 	return dateString;
 }
+
+export function formatTime(time: number) {
+	const hours = Math.floor(time / 3600);
+	const minutes = Math.floor((time % 3600) / 60);
+	const seconds = Math.floor(time % 60);
+	const timeString = `${
+		hours < 10 ? `0${hours}` : hours
+	}:${
+		minutes < 10 ? `0${minutes}` : minutes
+	}:${
+		seconds < 10 ? `0${seconds}` : seconds
+	}`;
+	return timeString;
+}
