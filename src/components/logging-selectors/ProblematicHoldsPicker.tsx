@@ -2,7 +2,7 @@ import * as React from "react";
 import { View } from "react-native";
 import Checkbox from "../basic-components/Checkbox";
 import { holdTypes } from "../../constants/holdTypes";
-import styles from "./styles";
+import { pickerStyles } from "./styles";
 
 interface ProblematicProps {
 	problemHolds: Array<string>;
@@ -16,9 +16,9 @@ export default function ProblematicHoldsPicker({
 	const half = Math.ceil(holdTypes.length / 2);
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.columnContainer}>
-				<View style={styles.column}>
+		<View style={pickerStyles.container}>
+			<View style={pickerStyles.columnContainer}>
+				<View style={pickerStyles.column}>
 					{holdTypes.slice(0, half).map((text, index) => (
 						<Checkbox
 							setState={setProblemHolds}
@@ -28,7 +28,7 @@ export default function ProblematicHoldsPicker({
 						/>
 					))}
 				</View>
-				<View style={styles.column}>
+				<View style={pickerStyles.column}>
 					{holdTypes.slice(half).map((text, index) => (
 						<Checkbox
 							setState={setProblemHolds}

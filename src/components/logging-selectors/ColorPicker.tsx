@@ -2,7 +2,7 @@ import * as React from "react";
 import { Picker } from "@react-native-picker/picker";
 import { View } from "react-native";
 import { holdOrTapeColors } from "../../constants/holdOrTapeColors";
-import styles from "./styles";
+import { pickerStyles } from "./styles";
 
 interface ColorProps {
 	color: string;
@@ -11,10 +11,10 @@ interface ColorProps {
 
 export default function ColorPicker({ color, setColor }: ColorProps) {
 	return (
-		<View style={styles.container}>
+		<View style={pickerStyles.container}>
 			<Picker
-				itemStyle={styles.pickerItem}
-				style={styles.picker}
+				itemStyle={pickerStyles.pickerItem}
+				style={pickerStyles.picker}
 				selectedValue={color}
 				onValueChange={(itemValue) => setColor(itemValue)}
 			>

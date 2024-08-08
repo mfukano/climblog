@@ -2,7 +2,7 @@ import * as React from "react";
 import { Picker } from "@react-native-picker/picker";
 import { View } from "react-native";
 import { boulderGrades, ropeGrades } from "../../constants/climbingGrades";
-import styles from "./styles";
+import { pickerStyles } from "./styles";
 
 interface GradeProps {
 	climbingDiscipline: string;
@@ -19,10 +19,10 @@ export default function GradePicker({
 		climbingDiscipline == "Boulder" ? boulderGrades : ropeGrades;
 
 	return (
-		<View style={styles.container}>
+		<View style={pickerStyles.container}>
 			<Picker
-				itemStyle={styles.pickerItem}
-				style={styles.picker}
+				itemStyle={pickerStyles.pickerItem}
+				style={pickerStyles.picker}
 				selectedValue={selectedGrade}
 				onValueChange={(itemValue) => setSelectedGrade(itemValue)}
 			>

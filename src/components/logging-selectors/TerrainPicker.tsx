@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { terrainTypes } from "../../constants/terrainTypes";
 import Checkbox from "../basic-components/Checkbox";
-import styles from "./styles";
+import { pickerStyles } from "./styles";
 
 interface TerrainProps {
 	terrain: Array<string>
@@ -13,9 +13,9 @@ export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
 	const half = Math.ceil(terrainTypes.length / 2);
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.columnContainer}>
-				<View style={styles.column}>
+		<View style={pickerStyles.container}>
+			<View style={pickerStyles.columnContainer}>
+				<View style={pickerStyles.column}>
 					{terrainTypes.slice(0, half).map((text, index) => (
 						<Checkbox
 							setState={setTerrain}
@@ -25,7 +25,7 @@ export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
 						/>
 					))}
 				</View>
-				<View style={styles.column}>
+				<View style={pickerStyles.column}>
 					{terrainTypes.slice(half).map((text, index) => (
 						<Checkbox
 							setState={setTerrain}

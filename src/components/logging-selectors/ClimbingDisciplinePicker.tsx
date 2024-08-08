@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Picker } from "@react-native-picker/picker";
 import { View } from "react-native";
-import styles from "./styles";
+import { pickerStyles } from "./styles";
 
 interface DisciplineProps {
 	climbingDiscipline: string;
@@ -13,10 +13,10 @@ export default function ClimbingDisciplinePicker({
 	setClimbingDiscipline,
 }: DisciplineProps) {
 	return (
-		<View style={styles.container}>
+		<View style={pickerStyles.container}>
 			<Picker
-				itemStyle={styles.pickerItem}
-				style={styles.picker}
+				itemStyle={pickerStyles.pickerItem}
+				style={pickerStyles.picker}
 				selectedValue={climbingDiscipline}
 				onValueChange={(itemValue) => setClimbingDiscipline(itemValue)}
 			>
