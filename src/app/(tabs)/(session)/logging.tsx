@@ -3,6 +3,7 @@ import {
 	StyleSheet,
 	ScrollView,
 	Text,
+	View,
 } from "react-native";
 import {
 	ColorPicker,
@@ -149,17 +150,56 @@ export default function LoggingScreen() {
 
 			<StyledButton style={{marginTop: 20}} text={"Submit Climb"} onPress={invokeNewClimbMutation} />
 
-			<Card style={{marginTop: 20, marginBottom: 30}}>
+			<Card style={{
+				marginTop: 20, 
+				marginBottom: 30,
+			}}>
 				<Divider text={"Page State"} />
-				<Text>{climbingDiscipline}</Text>
-				<Text>{grade}</Text>
-				<Text>{terrain.join(",")}</Text>
-				<Text>{problemHolds.join(",")}</Text>
-				<Text>{progress}</Text>
+
+				<View style={{
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: "space-between",
+					// gap: 80,
+					margin: 20
+				}}>
+
+					<View style={{
+						display: "flex",
+						alignContent: "space-around",
+						
+					}}>
+						<Text>Discipline: </Text>
+						<Text>Color: </Text>
+						<Text>Grade: </Text>
+						<Text>Terrain: </Text>
+						<Text>Problem Holds: </Text>
+						<Text>Progress: </Text>
+					</View>
+			
+					<View style={{
+					}}>
+						<Text>{climbingDiscipline}</Text>
+						<Text>{color}</Text>
+						<Text>{grade}</Text>
+						<Text>{terrain.length > 0 ? terrain.join(", "): "none"}</Text>
+						<Text>{problemHolds.length > 0 ? problemHolds.join(", ") : "none"}</Text>
+						<Text>{progress}</Text>
+					</View>
+
+				</View>
+
+
 			</Card>
+		
 		</ScrollView>
+	
 	);
+
 }
+
+
 
 const styles = StyleSheet.create({
 	container: {
