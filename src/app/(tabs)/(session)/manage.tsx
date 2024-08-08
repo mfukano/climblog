@@ -4,7 +4,7 @@ import useSessions from "@/src/hooks/db/useSessions";
 import StyledButton from "@/src/components/basic-components/StyledButton";
 import { Link } from "expo-router";
 import { formatDate, formatTime } from "@/src/helpers/dateHelper";
-import Card from "@/src/components/basic-components/Card";
+import { PressableCard } from "@/src/components/basic-components/Card";
 
 // TODO: I need to set up StackProps before I can run this through the linter
 // eslint-disable-next-line react/prop-types
@@ -36,25 +36,24 @@ export default function ManageSessions() {
 			</Link>
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
-					<Card style={{...styles.climbItemContainer}} key={index}>
-						<Text style={styles.climbItemHeader}>
-							{/* For debugging session model {JSON.stringify(session)} */}
-							{session.gymName}
-						</Text>
-						<Text>
-							{formatDate(session.startDateTime)}
-						</Text>
-						<Text>
-							{formatTime(session.duration)}
-						</Text>
-						{session.isActive === true &&
-						<Text>Active</Text>
-						}
-
-						<Link href={`${session.id}/active`} key={session.id} asChild>
-							<StyledButton ref={ref} text={"View session"} variant={"small"} />
-						</Link>
-					</Card>
+					
+					<Link href={`${session.id}/active`} key={session.id} asChild>
+						<PressableCard style={{...styles.climbItemContainer}} key={index}>
+							<Text style={styles.climbItemHeader}>
+								{/* For debugging session model {JSON.stringify(session)} */}
+								{session.gymName}
+							</Text>
+							<Text>
+								{formatDate(session.startDateTime)}
+							</Text>
+							<Text>
+								{formatTime(session.duration)}
+							</Text>
+							{session.isActive === true &&
+								<Text>Active</Text>
+							}
+						</PressableCard>
+					</Link>
 				))}
 			</View>
 		</ScrollView>
@@ -70,8 +69,12 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	climbListContainer: {
-		width: "100%",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		width: "90%",
 		marginTop: -10,
+
 	},
 	climbItemContainer: {
 		backgroundColor: "white",
