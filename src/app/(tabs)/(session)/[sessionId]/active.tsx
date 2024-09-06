@@ -51,17 +51,19 @@ export default function ActiveSessionPage() {
 	} else {
 		return (
 			<ScrollView contentContainerStyle={formStyles.container}>
-				<Link href={`/logging?sessionId=${sessionId}`} asChild>
-					<StyledButton text={"Log a Climb"} />
-				</Link>
+				<View style={{margin: 20,}}>
+					<Link href={`/logging-new?sessionId=${sessionId}`} asChild>
+						<StyledButton text={"Log a Climb"} />
+					</Link>
+				</View>
 				<View style={formStyles.climbListContainer}>
 					{climbsBySesh?.data?.map((climb, index) => (
 						// <Link href=`/climb/${climbId}`/>
 						<PressableCard style={formStyles.climbItemContainer} key={index}>
 							<Text style={formStyles.climbItemHeader}>
-								{climb.color} {climb.grade}
+								{climb.color} {climb.grade} {climb.terrain}
 							</Text>
-							<Text>Terrain type: {climb.terrain}</Text>
+							{/* <Text>Terrain type: {climb.terrain}</Text> */}
 							<Text>Problem holds: {climb.problemHolds}</Text>
 							{/* <Text>Terrain type: {climb.terrain?.join(',')}</Text> */}
 							{/* <Text>Problem holds: {climb.problemHolds.join(',')}</Text> */}

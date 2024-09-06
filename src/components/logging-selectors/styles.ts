@@ -5,7 +5,12 @@ const pickerStyles = StyleSheet.create({
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "row",
-		marginTop: 10,
+	},
+	checkboxContainer: {
+		alignItems: "center",
+		display: "flex",
+		flexDirection: "row",
+		marginVertical: 16,
 	},
 	columnContainer: {
 		display: "flex",

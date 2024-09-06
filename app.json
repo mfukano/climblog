@@ -31,7 +31,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-build-properties"
+      "expo-build-properties",
+      [
+        "expo-image-picker", {
+          "photosPermission": "Climblog accesses your photos to record pictures of your climbs.",
+          "cameraPermission": "Climblog optionally can use your phone camera to take pictures of your climbs."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

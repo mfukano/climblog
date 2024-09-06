@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
 	viewButtonLarge: {
 		paddingVertical: 20,
 		paddingHorizontal: 32,
-		margin: 20,
 	},
 	buttonTextBase: {
 		color: "#fff",

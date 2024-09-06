@@ -2,12 +2,13 @@ import StyledButton from "@/src/components/basic-components/StyledButton";
 import useTimer from "@/src/hooks/db/useTimer";
 import * as React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import Card from "../basic-components/Card";
 
 export default function Timer() {
 	const {displayTime, setOngoing, clearTime} = useTimer();
 	const ref = React.useRef(null);
 	return (
-		<>
+		<Card>
 			<View style={styles.wrapper}>
 				<Text style={styles.largeText}>{displayTime}</Text>
 				<View style={styles.container}>
@@ -16,13 +17,13 @@ export default function Timer() {
 					<StyledButton ref={ref} text={"Start"} onPress={() => setOngoing(true)} />
 				</View>
 			</View>
-		</>
+		</Card>
 	);
 }
 
 const styles = StyleSheet.create({
 	wrapper: {
-		padding: 8,
+		padding: 20,
 		width: "100%",
 		alignItems: "center",
 		flexDirection: "column",
@@ -30,12 +31,11 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		justifyContent: "space-evenly",
-		gap: 10,
-		padding: 10,
 		width: "100%",
+		gap: 20,
 	},
 	largeText: {
 		fontSize: 36,
-		margin: 12,
+		paddingBottom: 16,
 	}
 });

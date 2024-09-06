@@ -31,13 +31,15 @@ export default function ManageSessions() {
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-			<Link href={"/modal"} asChild>
-				<StyledButton ref={ref} text={"Start a new session"} />
-			</Link>
+			<View style={{margin: 20,}}>
+				<Link href={"/modal"} asChild>
+					<StyledButton ref={ref} text={"Start a new session"} />
+				</Link>
+			</View>
 			<View style={styles.climbListContainer}>
 				{sessions?.data?.map((session, index) => (
 					
-					<Link href={`${session.id}/active`} key={session.id} asChild>
+					<Link href={`/${session.id}/active`} key={session.id} asChild>
 						<PressableCard style={{...styles.climbItemContainer}} key={index}>
 							<Text style={styles.climbItemHeader}>
 								{/* For debugging session model {JSON.stringify(session)} */}

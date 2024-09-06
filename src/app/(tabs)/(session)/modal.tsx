@@ -43,7 +43,7 @@ export default function Modal() {
 			console.log(`checking returns after inserting session: ${sessionId}`);
 			queryClient.invalidateQueries({ queryKey: ["sessions"]});
 			router.dismissAll();
-			router.navigate(`${sessionId}/active`);
+			router.navigate(`/${sessionId}/active`);
 		}
 	});
 	
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	formContainer: {
-		height: "30%",
 		width: "100%",
 		justifyContent: "center",
 		backgroundColor: "#fff",

@@ -13,7 +13,7 @@ export default function TerrainPicker({ terrain, setTerrain }: TerrainProps) {
 	const half = Math.ceil(terrainTypes.length / 2);
 
 	return (
-		<View style={pickerStyles.container}>
+		<View style={pickerStyles.checkboxContainer}>
 			<View style={pickerStyles.columnContainer}>
 				<View style={pickerStyles.column}>
 					{terrainTypes.slice(0, half).map((text, index) => (

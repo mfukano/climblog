@@ -16,7 +16,7 @@ export default function ProblematicHoldsPicker({
 	const half = Math.ceil(holdTypes.length / 2);
 
 	return (
-		<View style={pickerStyles.container}>
+		<View style={pickerStyles.checkboxContainer}>
 			<View style={pickerStyles.columnContainer}>
 				<View style={pickerStyles.column}>
 					{holdTypes.slice(0, half).map((text, index) => (
