@@ -17,6 +17,8 @@ import {
 } from "@tanstack/react-query";
 
 import { useColorScheme } from "@s/hooks/useColorScheme";
+import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const queryClient = new QueryClient();
 
@@ -78,21 +80,24 @@ function RootLayoutNav() {
 
 	return (
 		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme }>
-			<Suspense fallback={<Fallback />}>
-				<QueryClientProvider client={queryClient}>
-					<SQLiteProvider 
-						databaseName="climblog.db"
-						assetSource={{ assetId: require("@/assets/db/climblog.db"), forceOverwrite: false }}
-						useSuspense>
+			<GestureHandlerRootView>
 
-						{/** providers that can be accessed by any routes  */}
-						<Stack>
-							{/* <Fallback /> */}
-							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-						</Stack>
-					</SQLiteProvider>
-				</QueryClientProvider>
-			</Suspense>
+				<Suspense fallback={<Fallback />}>
+					<QueryClientProvider client={queryClient}>
+						<SQLiteProvider 
+							databaseName="climblog.db"
+							assetSource={{ assetId: require("@/assets/db/climblog.db"), forceOverwrite: false }}
+							useSuspense>
+
+							{/** providers that can be accessed by any routes  */}
+							<Stack>
+								{/* <Fallback /> */}
+								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+							</Stack>
+						</SQLiteProvider>
+					</QueryClientProvider>
+				</Suspense>
+			</GestureHandlerRootView>
 		</ThemeProvider>
 	);
 }
