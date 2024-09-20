@@ -15,6 +15,8 @@ import StyledButton from "@/src/components/basic-components/StyledButton";
 import Timer from "@s/components/behavioral-components/Timer";
 import Card from "@/src/components/basic-components/Card";
 import HorizontalPicker from "@/src/components/basic-components/HorizontalPicker";
+import { boulderGrades } from "@/src/constants/climbingGrades";
+import { holdOrTapeColors } from "@/src/constants/holdOrTapeColors";
 
 export default function TabProfileScreen() {
 	// test
@@ -22,7 +24,8 @@ export default function TabProfileScreen() {
 	const [imageClicked, setImageClicked] = React.useState(false);
 	const [image, setImage] = React.useState(null);
 
-	const [pickerValue, setPickerValue] = React.useState(3);
+	const [gradeValue, setGradeValue] = React.useState(boulderGrades[0]);
+	const [colorValue, setColorValue] = React.useState(holdOrTapeColors[0]);
 
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
@@ -40,8 +43,12 @@ export default function TabProfileScreen() {
 	// end test
 
 	React.useEffect(() => {
-		console.log("pickerValue has changed: ", pickerValue);
-	}, [pickerValue]);
+		console.log(`
+		a value has changed; dumping state:
+		gradeValue: ${gradeValue}
+		colorValue: ${colorValue}	
+		`);
+	}, [colorValue, gradeValue]);
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
@@ -54,8 +61,11 @@ export default function TabProfileScreen() {
 			}
 			<Timer />
 
-			<Card id={"h-picker-card"}>
-				<HorizontalPicker stateVariable={pickerValue} stateSetFn={setPickerValue} />
+			<Card>
+				<HorizontalPicker items={boulderGrades} stateVariable={gradeValue} stateSetFn={setGradeValue} />
+				<HorizontalPicker items={holdOrTapeColors} stateVariable={colorValue} stateSetFn={setColorValue} selectorStyle={{ 
+					backgroundColor: colorValue.toLowerCase(),
+				}} />
 			</Card>
 		</ScrollView>
 	);

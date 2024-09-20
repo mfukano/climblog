@@ -1,54 +1,64 @@
 import React from "react";
 // import Picker from "react-native-picker-select";
-import { Animated, StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { HorizontalScrollPicker } from "react-native-horizontal-scroll-picker";
 import { View } from "react-native";
 
 type PickerProps = {
 	stateVariable: string,
 	stateSetFn: (stateVariable) => void,
+	items?: string[]
+	selectorStyle?: object
 }
 
-const ITEM_WIDTH = 40;
-const ITEMS = Array.from(Array(15).keys()).map((val, idx) => {
-	return {
-		label: val,
-		value: idx,
-	};
-});
-
+/**
+ * 
+ * @param stateVariable - I was passing this in for some reason but I think I might not need to use it
+ * @param stateSetFn - Passed setState() function to manage state for page using the picker
+ * @param items - The string arrays to iterate over for picker items
+ * @returns 
+ */
 export default function HorizantalPicker({
 	stateVariable,
-	stateSetFn
+	stateSetFn,
+	items,
+	selectorStyle,
 }: PickerProps) {
 	// const [scrollX, setScrollX] = React.useState(new Animated.Value(20));
-	const [selected, setSelected] = React.useState(3);
+	const [selected, setSelected] = React.useState(0);
+
+	const selectorStyleDarkColors = ["blue", "purple", "black"];
+	const subArr = selectorStyle && selectorStyle["backgroundColor"] !== undefined
+		? selectorStyleDarkColors.filter(str => str.includes(selectorStyle["backgroundColor"])) 
+		: [];
+	console.log(`check subArr: ${subArr}`);
+
+	const textColorStyle = {};
+
+	if (subArr.length > 0) {
+		textColorStyle["color"] = "white";				
+	}
+	
+	const itemsFallback = items || Array.from(Array(15).keys());
+
+	const ITEMS = itemsFallback.map((val, idx) => {
+		return {
+			label: val,
+			value: idx,
+		};
+	});
 
 	const updateState = (newValue) => {
-		console.log(`newValue: ${newValue}`);
+		console.log(`
+			newValue: ${newValue}
+			items[newValue]: ${items[newValue]}
+		`);
 		setSelected(newValue);
-		stateSetFn(newValue);
-	};
-
-	const opacityAnimation = React.useRef(new Animated.Value(0)).current;
-	const opacityStyle = { opacity: opacityAnimation };
-    
-	const animateOpacity = () => {
-		Animated.timing(opacityAnimation, {
-			toValue: 0,
-			duration: 0,
-			useNativeDriver: true
-		}).start(() => {
-			Animated.timing(opacityAnimation, {
-				toValue: 1,
-				duration: 0,
-				useNativeDriver: true,
-			}).start();
-		});
+		stateSetFn(items[newValue]);
 	};
 
 	return (
-		<View id={"h-picker-test"} style={{
+		<View style={{
 			/*
 			 * width: "100%",
 			 * height: 200,
@@ -59,13 +69,12 @@ export default function HorizantalPicker({
 				onSelect={(newValue) => updateState(newValue)}
 				initialIdx={selected}
 				containerStyle={styles.container}
-				selectorStyle={styles.selectorStyle}
-				// scrollX={scrollX}
+				selectorStyle={selectorStyle}
+				textStyle={styles.textStyle}
 				/*
-				 * textStyle={styles.textStyle}
-				 * selectedTextStyle={styles.selectedTextStyle}
 				 * itemStyle={styles.itemStyle}
 				 */
+				selectedTextStyle={textColorStyle}
 			/>
 		</View>
 	);
@@ -85,5 +94,6 @@ const styles = StyleSheet.create({
 	},
 	selectorStyle: {
 		// backgroundColor: "cyan",
+		borderWidth: 0,
 	}
 });
