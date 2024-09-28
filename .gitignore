@@ -33,7 +33,7 @@ local.properties
 
 # node.js
 #
-node_modules/
+node_modules/*
 npm-debug.log
 yarn-error.log
 .prettierrc
@@ -72,3 +72,6 @@ expo-env.d.ts
 DEVLOG.md
 .VSCodeCounter
 diagrams/
+
+# Modified modules
+!node_modules/react-native-horizontal-scroll-picker/src/

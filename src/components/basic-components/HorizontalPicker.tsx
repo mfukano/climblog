@@ -24,21 +24,8 @@ export default function HorizantalPicker({
 	items,
 	selectorStyle,
 }: PickerProps) {
-	// const [scrollX, setScrollX] = React.useState(new Animated.Value(20));
 	const [selected, setSelected] = React.useState(0);
 
-	const selectorStyleDarkColors = ["blue", "purple", "black"];
-	const subArr = selectorStyle && selectorStyle["backgroundColor"] !== undefined
-		? selectorStyleDarkColors.filter(str => str.includes(selectorStyle["backgroundColor"])) 
-		: [];
-	console.log(`check subArr: ${subArr}`);
-
-	const textColorStyle = {};
-
-	if (subArr.length > 0) {
-		textColorStyle["color"] = "white";				
-	}
-	
 	const itemsFallback = items || Array.from(Array(15).keys());
 
 	const ITEMS = itemsFallback.map((val, idx) => {
@@ -58,23 +45,12 @@ export default function HorizantalPicker({
 	};
 
 	return (
-		<View style={{
-			/*
-			 * width: "100%",
-			 * height: 200,
-			 */
-		}}>
+		<View>
 			<HorizontalScrollPicker
 				items={ITEMS}
 				onSelect={(newValue) => updateState(newValue)}
 				initialIdx={selected}
 				containerStyle={styles.container}
-				selectorStyle={selectorStyle}
-				textStyle={styles.textStyle}
-				/*
-				 * itemStyle={styles.itemStyle}
-				 */
-				selectedTextStyle={textColorStyle}
 			/>
 		</View>
 	);
@@ -85,15 +61,4 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 100
 	},
-	itemStyle: {
-		// padding: 20,
-	},
-	textStyle: {
-	},
-	selectedTextStyle: {
-	},
-	selectorStyle: {
-		// backgroundColor: "cyan",
-		borderWidth: 0,
-	}
 });

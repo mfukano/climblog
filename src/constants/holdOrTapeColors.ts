@@ -1,4 +1,5 @@
 export const holdOrTapeColors = [
+	"White",
 	"Red",
 	"Pink",
 	"Orange",
@@ -9,5 +10,4 @@ export const holdOrTapeColors = [
 	"Blue",
 	"Purple",
 	"Black",
-	"White"
 ];

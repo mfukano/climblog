@@ -63,9 +63,7 @@ export default function TabProfileScreen() {
 
 			<Card>
 				<HorizontalPicker items={boulderGrades} stateVariable={gradeValue} stateSetFn={setGradeValue} />
-				<HorizontalPicker items={holdOrTapeColors} stateVariable={colorValue} stateSetFn={setColorValue} selectorStyle={{ 
-					backgroundColor: colorValue.toLowerCase(),
-				}} />
+				<HorizontalPicker items={holdOrTapeColors} stateVariable={colorValue} stateSetFn={setColorValue} />
 			</Card>
 		</ScrollView>
 	);
