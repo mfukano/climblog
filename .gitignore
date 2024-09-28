@@ -74,4 +74,4 @@ DEVLOG.md
 diagrams/
 
 # Modified modules
-!node_modules/react-native-horizontal-scroll-picker/src/
+!node_modules/react-native-horizontal-scroll-picker/
