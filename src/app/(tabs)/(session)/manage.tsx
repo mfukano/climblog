@@ -20,9 +20,9 @@ export default function ManageSessions() {
 	if (!sessions?.data?.length) {
 		return (
 			<View>
-				<Text>Error</Text>
+				<Text>Whoops...</Text>
 				<Text>
-					There has been an error retrieving the sessions from the
+					There has been a problem retrieving the sessions from the
 					database.
 				</Text>
 			</View>

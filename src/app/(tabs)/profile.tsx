@@ -1,12 +1,12 @@
 import * as React from "react";
-import { 
-	Image, 
-	Pressable, 
+import {
+	Image,
+	Pressable,
 	StyleSheet,
-	Text, 
+	Text,
 	ScrollView,
-	View, 
-	Dimensions
+	View,
+	Dimensions,
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -42,33 +42,44 @@ export default function TabProfileScreen() {
 	};
 	// end test
 
-	React.useEffect(() => {
-		console.log(`
-		a value has changed; dumping state:
-		gradeValue: ${gradeValue}
-		colorValue: ${colorValue}	
-		`);
-	}, [colorValue, gradeValue]);
-
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-
-			{!image && <StyledButton style={{marginTop: 20}} text={"Upload climb image"} onPress={pickImage} />}
-			{image && 
+			{!image && (
+				<StyledButton
+					style={{ marginTop: 20 }}
+					text={"Upload climb image"}
+					onPress={pickImage}
+				/>
+			)}
+			{image && (
 				<Pressable onPress={() => setImageClicked(!imageClicked)}>
-					<Image source={{ uri: image }} style={imageClicked ? styles.imageLarge : styles.image} />
+					<Image
+						source={{ uri: image }}
+						style={imageClicked ? styles.imageLarge : styles.image}
+					/>
 				</Pressable>
-			}
+			)}
 			<Timer />
 
 			<Card>
-				<HorizontalPicker items={boulderGrades} stateVariable={gradeValue} stateSetFn={setGradeValue} />
-				<HorizontalPicker items={holdOrTapeColors} stateVariable={colorValue} stateSetFn={setColorValue} />
+				<View>
+					<Text>Grade </Text>
+					<HorizontalPicker
+						items={boulderGrades}
+						stateSetFn={setGradeValue}
+					/>
+				</View>
+				<View>
+					<Text>Color</Text>
+					<HorizontalPicker
+						items={holdOrTapeColors}
+						stateSetFn={setColorValue}
+					/>
+				</View>
 			</Card>
 		</ScrollView>
 	);
 }
-
 
 const styles = StyleSheet.create({
 	container: {
@@ -94,7 +105,7 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		width: 60,
 		height: 60,
-		resizeMode: "cover"
+		resizeMode: "cover",
 	},
 	imageLarge: {
 		width: Dimensions.get("window").width - 10,
@@ -103,5 +114,6 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		maxHeight: "100%",
 		resizeMode: "cover",
-	}
+	},
 });
+
